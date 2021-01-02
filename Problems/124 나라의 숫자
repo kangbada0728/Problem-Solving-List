@@ -1,0 +1,25 @@
+import java.util.ArrayList;
+import java.util.Stack;
+class Solution {
+	    public String solution(int N) {
+	        
+	    	StringBuilder answer = new StringBuilder();
+	    	
+	    	Stack<Integer> stk=new Stack<Integer>();
+	    	while(N>0) {
+	    		int rest=N%3;
+	    		N/=3;
+	    		if(rest==0) {
+	    			N-=1;
+	    			rest=4;
+	    		}
+	    		stk.add(rest);
+	    	}
+	        ArrayList<Integer> al = new ArrayList<Integer>();
+	        while(!stk.isEmpty()) {
+	        	answer.append(stk.pop());
+	        }
+	        
+	        return answer.toString();
+	    }
+	}
