@@ -1,0 +1,16 @@
+class Solution {
+	    public int solution(int[] citations) {	        
+	    	ArrayList<Integer> al = new ArrayList<Integer>();
+	    	for(int i:citations) {
+	    		al.add(i);
+	    	}
+	    	Collections.sort(al, Collections.reverseOrder());
+	    	int idx=0;
+	    	while(idx < al.size()) {
+	    		if(al.get(idx) <= idx)
+	    			break;
+	    		idx+=1;
+	    	}
+	    	return idx;
+	    }
+	}
