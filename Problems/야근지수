@@ -1,0 +1,38 @@
+class Solution {
+	    public long solution(int n, int[] works) {
+	        long answer = 0;
+	        
+	        int max_num=0;
+	        for(int i:works) {
+	        	max_num=Math.max(max_num, i);
+	        }
+	        int[] cnts = new int[max_num+1];
+	        for(int i:works) {
+	        	cnts[i]+=1;
+	        }
+	        int i=0;
+	        for(i=max_num; i>=1; --i) {
+	        	if(cnts[i]>0) {
+	        		if(cnts[i]<=n) {
+	        			cnts[i-1]+=cnts[i];
+	        			n-=cnts[i];
+	        			cnts[i]=0;
+	        		}else {
+	        			cnts[i-1]+=n;
+	        			cnts[i]-=n;
+	        			n=0;
+	        		}
+	        	}
+	        	if(n==0) {
+	        		break;
+	        	}
+	        }
+	        for(int j=i; j>=1; --j) {
+	        	if(cnts[j]>0) {
+	        		answer+=(long)(j*j)*(long)cnts[j];
+	        	}
+	        }
+	        
+	        return answer;
+	    }
+	}
