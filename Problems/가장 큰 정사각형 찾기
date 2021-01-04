@@ -1,0 +1,25 @@
+class Solution
+	{
+	    public int solution(int [][]board)
+	    {
+	    	int N=board.length;
+	    	int M=board[0].length;
+	    	int[][] memo = new int[N+1][M+1];
+	    	
+	    	int ans=0;
+	    	for(int i=1; i<=N; ++i) {
+	    		for(int j=1; j<=M; ++j) {
+	    			if(board[i-1][j-1]==1) {
+	    				int mini=0x7fffffff;
+	    				mini=Math.min(mini, memo[i-1][j]);
+	    				mini=Math.min(mini, memo[i-1][j-1]);
+	    				mini=Math.min(mini, memo[i][j-1]);
+	    				memo[i][j]=mini+1;
+	    				ans=Math.max(ans, memo[i][j]);
+	    			}
+	    		}
+	    	}
+	    	
+	    	return ans*ans;
+	    }
+	}
