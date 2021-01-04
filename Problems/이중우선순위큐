@@ -1,0 +1,37 @@
+class Solution {
+	    public int[] solution(String[] operations) {
+	        
+	        
+	        PriorityQueue<Integer> pq_up = new PriorityQueue<Integer>();
+	        PriorityQueue<Integer> pq_down = new PriorityQueue<Integer>(Collections.reverseOrder());
+	        
+	        StringTokenizer st;
+	        for(String s:operations) {
+	        	st = new StringTokenizer(s);
+	        	String order=st.nextToken();
+	        	int num=Integer.parseInt(st.nextToken());
+	        	if(order.equals("I")) {
+	        		pq_up.add(num);
+	        		pq_down.add(num);
+	        	}else {
+	        		if(pq_up.isEmpty()) {
+	        			continue;
+	        		}
+	        		if(num==1) {
+	        			int n=pq_down.poll();
+	        			pq_up.remove(n);
+	        		}else {
+	        			int n=pq_up.poll();
+	        			pq_down.remove(n);
+	        		}
+	        	}
+	        }
+	        if(pq_down.isEmpty()) {
+	        	int[] answer = {0, 0};
+	        	return answer;
+	        }else {
+	        	int[] answer= {pq_down.peek(), pq_up.peek()};
+	        	return answer;
+	        }
+	    }
+	}
