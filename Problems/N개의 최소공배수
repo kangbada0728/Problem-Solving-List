@@ -1,0 +1,50 @@
+class Solution {
+	    public int solution(int[] arr) {
+	        int answer = 1;
+	        
+	        int max_num=0;
+	        for(int i:arr) {
+	        	max_num=Math.max(max_num, i);
+	        }
+	        int M=max_num;
+	        boolean[] era = new boolean[M+1];
+	        era[0]=true;
+	        era[1]=true;
+	        for(int i=2; i<=M; ++i) {
+	        	if(!era[i]) {
+	        		for(int j=i+i; j<=M; j+=i) {
+	        			era[j]=true;
+	        		}
+	        	}
+	        }
+	        ArrayList<Integer> al = new ArrayList<Integer>();
+	        for(int i=2; i<=M; ++i) {
+	        	if(!era[i]) {
+	        		al.add(i);
+	        	}
+	        }
+	        
+	        for(int d:al) {
+	        	int max_cnt=0;
+	        	for(int i=0; i<arr.length; ++i) {
+	        		if(arr[i]>=d) {
+	        			int cnt=0;
+		        		while(arr[i]%d==0) {
+		        			arr[i]/=d;
+		        			cnt+=1;
+		        		}
+		        		max_cnt=Math.max(max_cnt, cnt);
+	        		}
+	        	}
+	        	for(int i=0; i<max_cnt; ++i) {
+	        		answer*=d;
+	        	}
+	        }
+	        
+	        for(int i:arr) {
+	        	answer*=i;
+	        }
+	        
+	        return answer;
+	    }
+	}
