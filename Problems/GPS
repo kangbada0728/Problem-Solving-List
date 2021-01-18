@@ -1,0 +1,48 @@
+class Solution {
+	    public int solution(int N, int M, int[][] edge_list, int K, int[] gps_log) {
+	        int answer = 0;
+	        
+	        
+	        boolean[][] edge_m = new boolean[N+1][N+1];
+	        for(int i=0; i<edge_list.length; ++i) {
+	        	int a=edge_list[i][0];
+	        	int b=edge_list[i][1];
+	        	edge_m[a][b]=true;
+	        	edge_m[b][a]=true;
+	        }
+	        for(int n=1; n<=N; ++n) {
+	        	edge_m[n][n]=true;
+	        }
+	        
+	        int[][] memo = new int[N+1][K];
+	        final int MAX = 100000000;
+	        for(int i=1; i<=N; ++i) {
+	        	for(int j=0; j<K; ++j) {
+	        		memo[i][j]=MAX;
+	        	}
+	        }
+	        memo[gps_log[0]][0]=0;
+	        
+	        for(int k=1; k<K; ++k) {
+	        	for(int cur=1; cur<=N; ++cur) {
+	        		for(int prev=1; prev<=N; ++prev) {
+	        			if(edge_m[prev][cur]) {
+	        				if(gps_log[k]!=cur) {
+	        					memo[cur][k] = Math.min(memo[cur][k], memo[prev][k-1]+1);
+	        				}else {
+	        					memo[cur][k] = Math.min(memo[cur][k], memo[prev][k-1]);
+	        				}
+	        			}
+	        		}
+	        	}
+	        }
+	        
+	        if(memo[gps_log[gps_log.length-1]][K-1]>=MAX) {
+	        	answer = -1;
+	        }else {
+	        	answer = memo[gps_log[gps_log.length-1]][K-1];
+	        }
+	        
+	        return answer;
+	    }
+	}
