@@ -1,0 +1,62 @@
+package practice;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class 키순서 {
+
+	public static void main(String[] args) throws Exception {
+		
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(bf.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+		
+		boolean[][] LR = new boolean[N+1][N+1];
+		boolean[][] RL = new boolean[N+1][N+1];
+		
+		for(int i=0; i<M; ++i) {
+			st = new StringTokenizer(bf.readLine());
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			LR[a][b]=true;
+			RL[b][a]=true;
+		}
+		
+		for(int k=1; k<=N; ++k) {
+			for(int i=1; i<=N; ++i) {
+				for(int j=1; j<=N; ++j) {
+					if(LR[i][k] && LR[k][j]) {
+						LR[i][j]=true;
+					}
+					if(RL[i][k] && RL[k][j]) {
+						RL[i][j]=true;
+					}
+				}
+			}
+		}
+		
+		int ans=0;
+		for(int n=1; n<=N; ++n) {
+			int cnt=0;
+			for(int i=1; i<=N; ++i) {
+				if(n==i) {
+					continue;
+				}
+				if(LR[n][i]) {
+					cnt+=1;
+				}
+				if(RL[n][i]) {
+					cnt+=1;
+				}
+			}
+			if(cnt==N-1) {
+				ans+=1;
+			}
+		}
+		System.out.println(ans);
+	}
+
+}
+
