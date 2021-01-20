@@ -1,0 +1,41 @@
+class Solution {
+		
+		int[][] a;
+		int[] answer = {0, 0};
+		
+		void dfs(int sx, int sy, int N) {
+			int num = a[sx][sy];
+			int ex = sx + N;
+			int ey = sy + N;
+			boolean flag=true;
+			for(int i=sx; i<ex; ++i) {
+				for(int j=sy; j<ey; ++j) {
+					if(num != a[i][j]) {
+						flag=false;
+						break;
+					}
+				}
+				if(!flag) {
+					break;
+				}
+			}
+			
+			if(flag) {
+				answer[num]+=1;
+			}else {
+				dfs(sx, sy, N/2);
+				dfs(sx+N/2, sy, N/2);
+				dfs(sx, sy+N/2, N/2);
+				dfs(sx+N/2, sy+N/2, N/2);
+			}	
+		}
+		
+	    public int[] solution(int[][] arr) {
+	        a=arr;
+	        int N=arr.length;
+	        
+	        dfs(0, 0, N);
+	        
+	        return answer;
+	    }
+	}
