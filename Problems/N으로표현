@@ -1,0 +1,39 @@
+class Solution {
+		
+		int n;
+		int num;
+		int ans=Integer.MAX_VALUE;
+		
+		void dfs(int cnt, int sum) {
+			if(cnt>8) {
+				return;
+			}
+			if(sum==num) {
+				ans=Math.min(ans, cnt);
+				return;
+			}
+		
+			int s=0;
+			for(int i=0; i<8; ++i) {
+				s=s*10+n;
+				
+				dfs(cnt+1+i, sum+s);
+				dfs(cnt+1+i, sum-s);
+				if(sum!=0) {
+					dfs(cnt+1+i, sum*s);
+					dfs(cnt+1+i, sum/s);
+				}
+			}
+		
+		}
+		
+	    public int solution(int N, int number) {
+	        n=N;
+	        num=number;
+	        dfs(0, 0);
+	        if(ans==Integer.MAX_VALUE){
+                ans=-1;
+            }
+	        return ans;
+	    }
+	}
