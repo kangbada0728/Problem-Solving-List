@@ -1,0 +1,67 @@
+class Solution {
+		
+		class Operator implements Comparable<Operator>{
+			int n;
+			char s;
+			
+			public Operator(int n, char s) {
+				this.n=n;
+				this.s=s;
+			}
+			
+			public int compareTo(Operator o) {
+				return Integer.valueOf(n).compareTo(o.n);
+			}
+		}
+		
+	    public long solution(String expression) {
+	        long answer = 0;
+	        
+	        for(int p=1; p<=3; ++p) {
+	        	for(int q=1; q<=3; ++q) {
+	        		for(int r=1; r<=3; ++r) {
+	        			if(p!=q && p!=r && q!=r) {
+	        				ArrayList<Operator> al = new ArrayList<Operator>();
+	        				al.add(new Operator(p, '+'));
+	        				al.add(new Operator(q, '-'));
+	        				al.add(new Operator(r, '*'));
+	        				
+	        				Collections.sort(al);
+	        				
+	        				StringTokenizer st = new StringTokenizer(expression, "+-*", true);
+	        				LinkedList<String> ll = new LinkedList<String>();
+	        				while(st.hasMoreTokens()) {
+	        					ll.add(st.nextToken());
+	        				}
+	        				
+	        				for(int i=0; i<3; ++i) {
+	        					String s=String.valueOf(al.get(i).s);
+	        					for(int j=0; j<ll.size(); ++j) {
+	        						if(s.equals(ll.get(j))) {
+	        							long a = Long.parseLong(ll.get(j-1));
+	        							long b = Long.parseLong(ll.get(j+1));
+	        							long c = 0;
+	        							if(s.equals("+")) {
+	        								c = a+b;
+	        							}else if(s.equals("-")) {
+	        								c = a-b;
+	        							}else {
+	        								c = a*b;
+	        							}
+	        							ll.set(j-1, String.valueOf(c));
+        								ll.remove(j);
+        								ll.remove(j);
+        								j-=1;
+	        						}
+	        					}
+	        				}
+	        				answer = Math.max(answer, Math.abs(Long.parseLong(ll.getFirst())));
+	        				
+	        			}
+	        		}
+	        	}
+	        }
+	        
+	        return answer;
+	    }
+	}
