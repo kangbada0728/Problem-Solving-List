@@ -1,0 +1,105 @@
+class Solution {
+		
+		class Info{
+			int minute;
+			String name;
+			String music;
+			
+			Info(String left, String right, String name, String music){
+				int h = Integer.parseInt(right.substring(0, 2)) - Integer.parseInt(left.substring(0, 2));
+				int m = Integer.parseInt(right.substring(3, 5)) - Integer.parseInt(left.substring(3, 5));
+				m += 60*h;
+				this.minute = m;
+				this.name=name;
+				
+				int ml = music.length();
+				if(m > ml) {
+					StringBuilder sb = new StringBuilder();
+					int cnt=m/ml;
+					while(cnt>0) {
+						sb.append(music);
+						cnt-=1;
+					}
+					sb.append(music.substring(0, m%ml));
+					this.music=sb.toString();
+				}else if(m == music.length()) {
+					this.music=music;
+				}else {
+					this.music=music.substring(0, m);
+				}
+			}
+		}
+		
+		HashMap<String, String> hm = new HashMap<String, String>();
+		
+		String changeStr(String m) {
+			StringBuilder sb = new StringBuilder();
+			for(int i=0; i<m.length(); ++i) {
+				char c = m.charAt(i);
+				if(c=='C' || c=='D' || c=='F' || c=='G' || c=='A') {
+					if(i+1<m.length() && m.charAt(i+1)=='#') {
+						sb.append(hm.get(c+"#"));	
+						i+=1;
+					}else {
+						sb.append(hm.get(c+""));
+					}
+				}else if(c=='E' || c=='B'){
+					sb.append(hm.get(c+""));
+				}else {
+					i+=1;
+				}
+			}
+			return sb.toString();
+		}
+		
+		void getHM() {
+			hm.put("C", "A");
+	        hm.put("C#", "B");
+	        hm.put("D", "C");
+	        hm.put("D#", "D");
+	        hm.put("E", "E");
+	        hm.put("F", "F");
+	        hm.put("F#", "G");
+	        hm.put("G", "H");
+	        hm.put("G#", "I");
+	        hm.put("A", "J");
+	        hm.put("A#", "K");
+	        hm.put("B", "L");
+		}
+		
+	    public String solution(String M, String[] musicinfos) {
+	        String answer = "";
+	        
+	        getHM();
+	        String m = changeStr(M);
+	        
+	        StringTokenizer st;
+	        ArrayList<Info> al = new ArrayList<Info>();
+	        for(String s : musicinfos) {
+	        	st = new StringTokenizer(s, ",");
+	        	al.add(new Info(st.nextToken(), st.nextToken(), st.nextToken(), changeStr(st.nextToken())));
+	        }
+	        
+	        int tmp_ans=-1;
+	        for(int i=0; i<al.size(); ++i) {
+	        	Info a = al.get(i);
+	        	if(a.music.contains(m)){
+	        		if(tmp_ans==-1) {
+	        			tmp_ans=i;
+	        		}else {
+	        			if(al.get(tmp_ans).minute < al.get(i).minute) {
+	        				tmp_ans=i;
+	        			}
+	        		}
+	        	}
+	        }
+	        
+	        if(tmp_ans==-1) {
+	        	answer = "(None)";
+	        }else {
+	        	answer = al.get(tmp_ans).name;
+	        }
+	        
+	        return answer;
+	    }
+	}
