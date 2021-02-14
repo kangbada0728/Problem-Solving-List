@@ -1,0 +1,58 @@
+class Solution {
+		
+		
+	    public String solution(String id) {
+	        String answer = "";
+	        answer.repl
+	        id=id.toLowerCase();
+	        String tmp="";
+	        for(int i=0; i<id.length(); ++i) {
+	        	char c = id.charAt(i);
+	        	int cn = (int)c;
+	        	if((97<=cn && cn<=122) || (48<=cn && cn<=57) || c=='-' || c=='_' || c=='.') {
+	        		tmp+=c;
+	        	}
+	        }
+	        id=tmp;
+	        tmp="";
+	        boolean flag=true;
+	        for(int i=0; i<id.length(); ++i) {
+	        	char c = id.charAt(i);
+	        	if(c=='.' && flag) {
+	        		tmp+=c;
+	        		flag=false;
+	        	}else if(c=='.' && !flag) {
+	        		continue;
+	        	}else {
+	        		tmp+=c;
+	        		flag=true;
+	        	}
+	        }
+	        id=tmp;
+	        if(id.charAt(0)=='.') {
+	        	id=id.substring(1);
+	        }
+	        if(id.length()-1 > 0 && id.charAt(id.length()-1)=='.') {
+	        	id=id.substring(0, id.length()-1);
+	        }
+	        
+	        if(id.equals("")) {
+	        	id+="a";
+	        }
+	        if(id.length()>=16) {
+	        	id=id.substring(0, 15);
+	        	if(id.charAt(id.length()-1)=='.') {
+	        		id=id.substring(0, 14);
+	        	}
+	        }
+	        if(id.length()<=2) {
+	        	while(id.length()<3) {
+	        		id+=id.charAt(id.length()-1);
+	        	}
+	        }
+	        
+	        answer=id;
+	        
+	        return answer;
+	    }
+	}
