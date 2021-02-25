@@ -1,0 +1,83 @@
+class Solution {
+		
+		boolean[][] alpha_m;
+		int cnt=0;
+		List<Character> alpha_list;
+		int max_cnt=0;
+		List<String> max_str;
+		
+		
+		void dfs(List<Character> ls, int i) {
+			if(ls.size()==cnt) {
+				int cnt_person=0;
+				for(int j=0; j<alpha_m.length; ++j) {
+					int cnt_alpha=0;
+					for(int k=0; k<ls.size(); ++k) {
+						int cn = (int)ls.get(k) - 65;
+						if(alpha_m[j][cn]) {
+							cnt_alpha+=1;
+						}
+					}
+					if(cnt_alpha==cnt) {
+						cnt_person+=1;
+					}
+				}
+				if(cnt_person>=2) {
+					Collections.sort(ls);
+					String s="";
+					for(Character c:ls) {
+						s+=c;
+					}
+					if(cnt_person>max_cnt) {
+						max_cnt=cnt_person;
+						max_str.clear();
+						max_str.add(s);
+					}else if(cnt_person==max_cnt) {
+						max_str.add(s);
+					}
+				}
+				return;
+			}
+			if(i==alpha_list.size()) {
+				return;
+			}
+			ls.add(alpha_list.get(i));
+			dfs(ls, i+1);
+			ls.remove(ls.size()-1);
+			dfs(ls, i+1);
+		}
+		
+	    public String[] solution(String[] orders, int[] course) {
+	        
+	        alpha_m = new boolean[orders.length][26];
+	        HashSet<Character> hs = new HashSet<>();
+	        for(int j=0; j<orders.length; ++j) {
+	        	String s = orders[j];
+	        	for(int i=0; i<s.length(); ++i) {
+	        		char c = s.charAt(i);
+	        		alpha_m[j][(int)c - 65] = true;
+	        		hs.add(c);
+	        	}
+	        }
+	        
+	        List<String> ans = new ArrayList<String>();
+	        alpha_list = new ArrayList<Character>(hs);
+	        for(int i=0; i<course.length; ++i) {
+	        	cnt=course[i];
+	        	
+	        	List<Character> ls = new ArrayList<Character>();
+	        	max_cnt=0;
+	        	max_str=new ArrayList<String>();
+	        	dfs(ls, 0);
+	        	ans.addAll(max_str);
+	        }
+	        
+	        Collections.sort(ans);
+	        String[] answer = new String[ans.size()];
+	        for(int i=0; i<answer.length; ++i) {
+	        	answer[i]=ans.get(i);
+	        }
+	        
+	        return answer;
+	    }
+	}
