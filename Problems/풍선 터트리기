@@ -1,0 +1,34 @@
+class Solution {
+		
+	    public int solution(int[] a) {
+	        int answer = 0;
+	        
+	        int[] lower_lr = new int[a.length];
+	        lower_lr[0]=a[0];
+	        int low=a[0];
+	        for(int i=1; i<a.length; ++i) {
+	        	if(low>a[i]) {
+	        		low=a[i];
+	        	}
+	        	lower_lr[i]=low;
+	        }
+	        
+	        int[] lower_rl = new int[a.length];
+	        lower_rl[a.length-1]=a[a.length-1];
+	        low=a[a.length-1];
+	        for(int i=a.length-2; i>=0; --i) {
+	        	if(low>a[i]) {
+	        		low=a[i];
+	        	}
+	        	lower_rl[i]=low;
+	        }
+	        
+	        for(int i=0; i<a.length; ++i) {
+	        	if(lower_lr[i]>=a[i] || lower_rl[i]>=a[i]) {
+	        		answer+=1;
+	        	}
+	        }
+	        
+	        return answer;
+	    }
+	}
