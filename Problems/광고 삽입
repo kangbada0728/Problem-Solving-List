@@ -1,0 +1,48 @@
+class Solution {
+	    public String solution(String play_time, String adv_time, String[] logs) {
+	        String answer = "";
+	        
+	        StringTokenizer st;
+	        
+	        st = new StringTokenizer(play_time, ":");
+	        int pt = Integer.parseInt(st.nextToken())*60*60 + Integer.parseInt(st.nextToken())*60 + Integer.parseInt(st.nextToken());
+	        st = new StringTokenizer(adv_time, ":");
+	        int at = Integer.parseInt(st.nextToken())*60*60 + Integer.parseInt(st.nextToken())*60 + Integer.parseInt(st.nextToken());
+	        
+	        long[] times = new long[360001];
+	        for(String s : logs) {
+	        	st = new StringTokenizer(s, ":-");
+	        	int start_time = Integer.parseInt(st.nextToken())*60*60 + Integer.parseInt(st.nextToken())*60 + Integer.parseInt(st.nextToken());
+	        	int end_time = Integer.parseInt(st.nextToken())*60*60 + Integer.parseInt(st.nextToken())*60 + Integer.parseInt(st.nextToken());
+	        	times[start_time]+=1;
+	        	times[end_time]-=1;
+	        }
+	        
+	        for(int i=1; i<=pt; ++i) {
+	        	times[i]+=times[i-1];
+	        }
+	        for(int i=1; i<=pt; ++i) {
+	        	times[i]+=times[i-1];
+	        }
+	        
+	        long max_time_len = times[at-1];
+	        int start_time = 0;
+	        for(int i=0; i+at <= pt; ++i) {
+	        	long tmp = times[i+at] - times[i];
+	        	if(tmp>max_time_len){
+	        		max_time_len=tmp;
+	        		start_time=i+1;
+	        	}
+	        }
+	        
+	        int h = start_time/3600;
+	        start_time%=3600;
+	        int m = start_time/60;
+	        start_time%=60;
+	        int s = start_time;
+	        
+	        answer = String.format("%02d:%02d:%02d", h, m, s);
+	        
+	        return answer;
+	    }
+	}
