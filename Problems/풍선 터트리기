@@ -1,34 +1,48 @@
-class Solution {
-		
-	    public int solution(int[] a) {
-	        int answer = 0;
-	        
-	        int[] lower_lr = new int[a.length];
-	        lower_lr[0]=a[0];
-	        int low=a[0];
-	        for(int i=1; i<a.length; ++i) {
-	        	if(low>a[i]) {
-	        		low=a[i];
-	        	}
-	        	lower_lr[i]=low;
-	        }
-	        
-	        int[] lower_rl = new int[a.length];
-	        lower_rl[a.length-1]=a[a.length-1];
-	        low=a[a.length-1];
-	        for(int i=a.length-2; i>=0; --i) {
-	        	if(low>a[i]) {
-	        		low=a[i];
-	        	}
-	        	lower_rl[i]=low;
-	        }
-	        
-	        for(int i=0; i<a.length; ++i) {
-	        	if(lower_lr[i]>=a[i] || lower_rl[i]>=a[i]) {
-	        		answer+=1;
-	        	}
-	        }
-	        
-	        return answer;
-	    }
-	}
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <tuple>
+#include <stack>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstring>
+
+using namespace std;
+
+const int MAX=0x7fffffff;
+
+int solution(vector<int> a) {
+    int answer = 0;
+    
+    int n=(int)a.size();
+    
+    int smallest_lr[n];
+    int smallest_rl[n];
+    
+    smallest_lr[0] = MAX;
+    for(int i=1; i<n; ++i){
+        smallest_lr[i]=min(smallest_lr[i-1], a[i-1]);
+    }
+    smallest_rl[n-1] = MAX;
+    for(int i=n-2; i>=0; --i){
+        smallest_rl[i]=min(smallest_rl[i+1], a[i+1]);
+    }
+    
+    for(int i=0; i<n; ++i){
+        int cnt=0;
+        if(smallest_lr[i]>a[i]){
+            cnt+=1;
+        }
+        if(smallest_rl[i]>a[i]){
+            cnt+=1;
+        }
+        if(cnt>=1){
+            answer+=1;
+        }
+    }
+    
+    return answer;
+}
