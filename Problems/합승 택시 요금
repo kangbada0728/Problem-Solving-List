@@ -1,0 +1,51 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <tuple>
+#include <stack>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstring>
+
+using namespace std;
+
+int fare[201][201];
+
+int solution(int n, int s, int a, int b, vector<vector<int>> fares) {
+    int answer = 0x7fffff;
+    
+    for(int i=1; i<=n; ++i){
+        for(int j=1; j<=n; ++j){
+            if(i!=j){
+                fare[i][j]=0x7fffff;
+            }
+        }
+    }
+    
+    for(int i=0; i<fares.size(); ++i){
+        int c = fares[i][0];
+        int d = fares[i][1];
+        int f = fares[i][2];
+        fare[c][d]=f;
+        fare[d][c]=f;
+    }
+    
+    for(int k=1; k<=n; ++k){
+        for(int i=1; i<=n; ++i){
+            for(int j=1; j<=n; ++j){
+                if(fare[i][j] > fare[i][k] + fare[k][j]){
+                    fare[i][j] = fare[i][k] + fare[k][j];
+                }
+            }
+        }
+    }
+    
+    for(int i=1; i<=n; ++i){
+        answer = min(answer, fare[s][i] + fare[i][a] + fare[i][b]);
+    }
+    
+    return answer;
+}
