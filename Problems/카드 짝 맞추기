@@ -1,0 +1,239 @@
+#include <string>
+#include <vector>
+#include <set>
+#include <cstring>
+#include <queue>
+#include <iostream>
+
+using namespace std;
+
+int N=4;
+vector<vector<int>> matrix;
+int R=0, C=0;
+vector<int> pictures;
+
+int picture_x[7][2];
+int picture_y[7][2];
+
+bool visit[4][4];
+
+int result=0x7fffffff;
+bool used[7];
+
+// 0, 0, 1, -1
+int dx(int i, vector<vector<int>>& m, int x, int y){
+    if(i==0){
+        return x;
+    }else if(i==1){
+        return x;
+    }else if(i==2){
+        return x+1;
+    }else if(i==3){
+        return x-1;
+    }else if(i==4){
+        return x;
+    }else if(i==5){
+        return x;
+    }else if(i==6){
+        int nx=x;
+        while(0<=nx+1 && nx+1<N && 0<=y && y<N){
+            if(m[nx+1][y]==0){
+                nx+=1;
+            }else{
+                nx+=1;
+                break;
+            }
+        }
+        return nx;
+    }else if(i==7) { // i==7
+        int nx=x;
+        while(0<=nx-1 && nx-1<N && 0<=y && y<N){
+            if(m[nx-1][y]==0){
+                nx-=1;
+            }else{
+                nx-=1;
+                break;
+            }
+        }
+        return nx;
+    }
+    return 0;
+}
+
+int dy(int i, vector<vector<int>>& m, int x, int y){
+    if(i==0){
+        return y+1;
+    }else if(i==1){
+        return y-1;
+    }else if(i==2){
+        return y;
+    }else if(i==3){
+        return y;
+    }else if(i==4){
+        int ny=y;
+        while(0<=ny+1 && ny+1<N && 0<=x && x<N){
+            if(m[x][ny+1]==0){
+                ny+=1;
+            }else{
+                ny+=1;
+                break;
+            }
+        }
+        return ny;
+    }else if(i==5){
+        int ny=y;
+        while(0<=ny-1 && ny-1<N && 0<=x && x<N){
+            if(m[x][ny-1]==0){
+                ny-=1;
+            }else{
+                ny-=1;
+                break;
+            }
+        }
+        return ny;
+    }else if(i==6){
+        return y;
+    }else if(i==7){ // i==7
+        return y;
+    }
+    return 0;
+}
+
+int bfs(vector<pair<int, int>>& seq){
+    
+    int lx=R;
+    int ly=C;
+    int rx=-1;
+    int ry=-1;
+    vector<vector<int>> m(matrix);
+    
+    int total_cnt=0;
+    for(int i=0; i<seq.size(); ++i){
+        int pic=seq[i].first;
+        int num=seq[i].second;
+        
+        rx=picture_x[pic][num];
+        ry=picture_y[pic][num];
+        
+        queue<pair<int, int>> q;
+        memset(visit, false, sizeof(visit));
+        
+        q.push(make_pair(lx, ly));
+        visit[lx][ly]=true;
+        
+        int cnt=0;
+        bool flag=false;
+        while(!q.empty()){
+            int count=q.size();
+            while(count--){
+                int x=q.front().first;
+                int y=q.front().second;
+                q.pop();
+                
+                if(x==rx && y==ry){
+                    flag=true;
+                    break;
+                }
+                
+                for(int i=0; i<8; ++i){
+                    int nx=dx(i, m, x, y);
+                    int ny=dy(i, m, x, y);
+                                        
+                    if(0<=nx && nx<N && 0<=ny && ny<N && !visit[nx][ny]){
+                        q.push(make_pair(nx, ny));
+                        visit[nx][ny]=true;
+                    }
+                }
+            }
+            if(flag){
+                break;
+            }
+            cnt+=1;
+        }
+        
+        if(i%2==1){
+            m[picture_x[pic][0]][picture_y[pic][0]]=0;
+            m[picture_x[pic][1]][picture_y[pic][1]]=0;
+        }
+        total_cnt+=cnt;
+        lx=rx;
+        ly=ry;
+    }
+    
+    return total_cnt;
+}
+
+
+void dfs(vector<pair<int, int>>& seq){
+    if(seq.size()==2*pictures.size()){
+        result=min(result, bfs(seq) + (int)pictures.size()*2);
+        return;
+    }
+    
+    for(int i=0; i<pictures.size(); ++i){
+        int pic=pictures[i];
+        if(!used[pic]){
+            used[pic]=true;
+            seq.push_back(make_pair(pic, 0));
+            seq.push_back(make_pair(pic, 1));
+            dfs(seq);
+            seq.pop_back();
+            seq.pop_back();
+    
+            seq.push_back(make_pair(pic, 1));
+            seq.push_back(make_pair(pic, 0));
+            dfs(seq);
+            seq.pop_back();
+            seq.pop_back();
+            used[pic]=false;
+        }
+    }
+    
+}
+
+
+void get_pictures_sort(void){
+    set<int> st;
+    for(int i=0; i<N; ++i){
+        for(int j=0; j<N; ++j){
+            int n=matrix[i][j];
+            if(n>0){
+                st.insert(n);
+                if(picture_x[n][0]==-1){
+                    picture_x[n][0]=i;
+                    picture_y[n][0]=j;
+                }else{
+                    picture_x[n][1]=i;
+                    picture_y[n][1]=j;
+                }
+            }
+        }
+    }
+    
+    for(auto it=st.begin(); it!=st.end(); ++it){
+        pictures.push_back(*it);
+    }
+}
+
+void init(vector<vector<int>>& board, int r, int c){
+    matrix=board;
+    for(int i=0; i<7; ++i){
+        for(int j=0; j<2; ++j){
+            picture_x[i][j]=-1;
+            picture_y[i][j]=-1;
+        }
+    }
+    R=r;
+    C=c;
+}
+
+int solution(vector<vector<int>> board, int r, int c) {
+    
+    init(board, r, c);
+    get_pictures_sort();
+    
+    vector<pair<int, int>> seq;
+    dfs(seq);
+    
+    return result;
+}
