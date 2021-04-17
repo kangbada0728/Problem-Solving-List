@@ -1,0 +1,23 @@
+package practice;
+
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class 창영이의일기장 {
+
+	public static void main(String[] args) {
+		
+		Scanner sc = new Scanner(System.in);
+		String s = sc.nextLine();
+		
+		Pattern pattern = Pattern.compile("([aeiou])p[aeiou]");
+		Matcher matcher = pattern.matcher(s);
+		s = matcher.replaceAll("$1");
+		
+		System.out.println(s);
+
+	}
+
+}
+
