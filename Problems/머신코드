@@ -1,0 +1,32 @@
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class 머신코드 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		String s = sc.nextLine();
+		
+		Pattern p = Pattern.compile("[A-Z][a-z]*");
+		Matcher m = p.matcher(s);
+		
+		int result=0;
+		int l=0;
+		while(m.find()) {
+			int len = m.group().length();
+			if(len%4>0) {
+				result += 4-len%4;
+				l = 4-len%4;
+			}else {
+				l=0;
+			}
+			
+		}
+		result-=l;
+		System.out.println(result);
+
+	}
+
+}
+
