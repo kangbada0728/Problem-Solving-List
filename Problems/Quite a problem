@@ -1,0 +1,27 @@
+package practice;
+
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Quiteaproblem {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		Pattern p = Pattern.compile("problem");
+		Matcher m;
+		StringBuilder sb = new StringBuilder();
+		while(sc.hasNextLine()) {
+			String s = sc.nextLine().toLowerCase();
+			m = p.matcher(s);
+			if(m.find()) {
+				sb.append("yes\n");
+			}else {
+				sb.append("no\n");
+			}
+		}
+		System.out.println(sb);
+	}
+
+}
+
