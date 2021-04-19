@@ -1,0 +1,100 @@
+class Solution {
+		
+		class Node{
+			int[] next_char_idx_list = new int[26];
+			int[] count = new int[26];
+			boolean finished;
+			Node() {
+				for(int i=0; i<26; ++i) {
+					next_char_idx_list[i] = -1;
+					count[i] = 0;
+				}
+				finished = false;
+			}
+		}
+			
+		class Trie {
+			List<Node> tree = new ArrayList<Node>();
+			int root;
+			
+			Trie() {
+				tree.add(new Node());
+				root = 0;
+			}
+			
+			void add(String s) {
+				add(root, s, 0);
+			}
+			void add(int cur_char_idx, String s, int index) {
+				if(index == s.length()) {
+					tree.get(cur_char_idx).finished = true;
+					return;
+				}
+				int c = (int)(s.charAt(index)) - (int)('a');
+				tree.get(cur_char_idx).count[c]+=1;
+				if(tree.get(cur_char_idx).next_char_idx_list[c] == -1) {
+					tree.add(new Node());
+					int next = tree.size() - 1;
+					tree.get(cur_char_idx).next_char_idx_list[c] = next;
+				}
+				int next_char_idx = tree.get(cur_char_idx).next_char_idx_list[c];
+				add(next_char_idx, s, index + 1);
+			}
+				
+			int search(String s) {
+				return search(root, -1, s, 0);
+			}
+			int search(int cur_char_idx, int prev_char_idx, String s, int index) {
+				if(cur_char_idx==-1) {
+					return 0;
+				}
+				if(index==s.length() || s.charAt(index)=='?') {
+					if(index==0) {
+						int cnt=0;
+						for(int i=0; i<26; ++i) {
+							cnt += tree.get(root).count[i];
+						}
+						return cnt;
+					}else {
+						int c = (int)(s.charAt(index-1)) - (int)('a');
+						return tree.get(prev_char_idx).count[c];
+					}
+				}
+				int c = (int)(s.charAt(index)) - (int)('a');
+				int next_char_idx = tree.get(cur_char_idx).next_char_idx_list[c];
+				return search(next_char_idx, cur_char_idx, s, index+1);
+			}
+		}
+		
+		
+	    public int[] solution(String[] words, String[] queries) {
+	        int[] answer = new int[queries.length];
+	        
+	        Trie[] trie_lr = new Trie[10001];
+	        Trie[] trie_rl = new Trie[10001];
+	        for(int i=0; i<10001; ++i){
+                trie_lr[i] = new Trie();
+                trie_rl[i] = new Trie();
+            }
+	        
+	        for(String lr : words) {
+	        	String rl = new StringBuilder(lr).reverse().toString();
+	        	int len = lr.length();	
+	        	trie_lr[len].add(lr);
+	        	trie_rl[len].add(rl);
+	        }
+	        
+	        for(int i=0; i<queries.length; ++i) {
+	        	String s = queries[i];
+	        	int len = s.length();
+	        	if(s.charAt(0)!='?') {
+	        		answer[i]+=trie_lr[len].search(s);
+	        	}else {
+	        		s = new StringBuilder(s).reverse().toString();
+	        		answer[i]+=trie_rl[len].search(s);
+	        	}
+	        }
+	        
+	        return answer;
+	    }
+	}
