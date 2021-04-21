@@ -1,0 +1,102 @@
+class Solution {
+		
+		class Webpage implements Comparable<Webpage>{
+			int index;
+			String page_url;
+			int basic_score;
+			Set<String> external_link = new HashSet<String>();
+			int external_link_cnt;
+			double link_score;
+			double matching_score;
+			
+			public Webpage(int index, String word, String page) {
+				page = page.toLowerCase();
+				word = word.toLowerCase();
+				
+				this.index = index;
+				setPageUrl(page);
+				setBasicScore(word, page);
+				setExternalLink(page);
+			}
+			
+			void setPageUrl(String page) {
+				Pattern p = Pattern.compile("<meta property=\"og:url\" content=\"https://(.+?)\"/>");
+				Matcher m = p.matcher(page);
+				while(m.find()) {
+					page_url = m.group(1);
+				}
+			}
+			
+			void setBasicScore(String word, String page) {
+				String html = page;
+				int idx = html.indexOf(word);
+		        while (idx != -1) {
+		        	char pre = html.charAt(idx - 1);
+		        	char post = html.charAt(idx + word.length());
+
+		        	if (!Character.isLowerCase(pre) && !Character.isLowerCase(post)) {
+		        		basic_score++;
+		        	}
+		        	idx = html.indexOf(word, idx + 1);
+		        }
+			}
+			
+			void setExternalLink(String page) {
+				Pattern p = Pattern.compile("<a href=\"https://(.+?)\">");
+				Matcher m = p.matcher(page);
+				int cnt=0;
+				while(m.find()) {
+					external_link.add(m.group(1));
+					cnt+=1;
+				}
+				external_link_cnt=cnt;
+			}
+			
+			void setLinkCnt(Webpage[] webpages) {
+				for(int i=0; i<webpages.length; ++i) {
+					Webpage w = webpages[i];
+					if(w.external_link.contains(page_url)) {
+						link_score += ((double)w.basic_score)/((double)w.external_link_cnt);
+					}
+				}
+			}
+			
+			void setMatchingScore() {
+				matching_score = basic_score + link_score;
+			}
+			
+			@Override
+			public int compareTo(Webpage o) {
+				if(matching_score!=o.matching_score) {
+					if(matching_score<o.matching_score) {
+						return 1;
+					}else {
+						return -1;
+					}
+				}else {
+					return index-o.index;
+				}
+			}
+			
+		}
+		
+	    public int solution(String word, String[] pages) {
+	        int answer = 0;
+	        
+	        Webpage[] webpages = new Webpage[pages.length];
+	        for(int i=0; i<pages.length; ++i) {
+	        	webpages[i] = new Webpage(i, word, pages[i]);
+	        }
+	        for(int i=0; i<pages.length; ++i) {
+	        	webpages[i].setLinkCnt(webpages);
+	        }
+	        for(int i=0; i<pages.length; ++i) {
+	        	webpages[i].setMatchingScore();
+	        }
+	        
+	        Arrays.sort(webpages);
+	        answer = webpages[0].index;
+	        
+	        return answer;
+	    }
+	}
