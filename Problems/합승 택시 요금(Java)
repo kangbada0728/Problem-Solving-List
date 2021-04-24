@@ -1,0 +1,38 @@
+class Solution {
+	    public int solution(int n, int s, int a, int b, int[][] fares) {
+	        int answer = Integer.MAX_VALUE;
+	        
+	        int[][] memo = new int[n+1][n+1];
+	        for(int i=1; i<=n; ++i) {
+	        	for(int j=1; j<=n; ++j) {
+	        		memo[i][j] = 100001;
+	        	}
+	        }
+	        for(int i=1; i<=n; ++i) {
+	        	memo[i][i] = 0;
+	        }
+	        for(int i=0; i<fares.length; ++i) {
+	        	int c = fares[i][0];
+	        	int d = fares[i][1];
+	        	int f = fares[i][2];
+	        	memo[c][d]=f;
+	        	memo[d][c]=f;
+	        }
+	        
+	        for(int k=1; k<=n; ++k) {
+	        	for(int i=1; i<=n; ++i) {
+	        		for(int j=1; j<=n; ++j) {
+	        			if(memo[i][j] > memo[i][k] + memo[k][j]) {
+	        				memo[i][j] = memo[i][k] + memo[k][j];
+	        			}
+	        		}
+	        	}
+	        }
+	        
+	        for(int i=1; i<=n; ++i) {
+	        	answer = Math.min(answer, memo[s][i] + memo[i][a] + memo[i][b]);
+	        }
+	        
+	        return answer;
+	    }
+	}
