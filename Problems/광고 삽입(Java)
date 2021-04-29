@@ -1,0 +1,67 @@
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+class Solution {
+	    public String solution(String play_time, String adv_time, String[] logs) {
+	        String answer = "";
+	        
+	        Pattern p1 = Pattern.compile("(..):(..):(..)");
+	        Pattern p2 = Pattern.compile("(..):(..):(..)\\-(..):(..):(..)");
+	        
+	        Matcher m;
+	        
+	        m = p1.matcher(play_time);
+            m.find();
+	        int playTime = Integer.parseInt(m.group(1))*60*60 
+	        		+ Integer.parseInt(m.group(2))*60 
+	        		+ Integer.parseInt(m.group(3));
+	        
+	        m = p1.matcher(adv_time);
+            m.find();
+	        int advTime = Integer.parseInt(m.group(1))*60*60 
+	        		+ Integer.parseInt(m.group(2))*60 
+	        		+ Integer.parseInt(m.group(3));
+	        
+	        long[] times = new long[360001];
+	        
+	        for(String log : logs) {
+	        	m = p2.matcher(log);
+                m.find();
+	        	int left = Integer.parseInt(m.group(1))*60*60 
+		        		+ Integer.parseInt(m.group(2))*60 
+		        		+ Integer.parseInt(m.group(3));
+	        	int right = Integer.parseInt(m.group(4))*60*60 
+		        		+ Integer.parseInt(m.group(5))*60 
+		        		+ Integer.parseInt(m.group(6));
+	        	
+	        	times[left]+=1;
+	        	times[right]-=1;
+	        }
+	        for(int i=1; i<=playTime; ++i) {
+	        	times[i]+=times[i-1];
+	        }
+	        for(int i=1; i<=playTime; ++i) {
+	        	times[i]+=times[i-1];
+	        }
+	        
+	        int start_time=0;
+	        long len=times[advTime-1];
+	        for(int i=1; i+advTime<=playTime; ++i) {
+	        	long tmp = times[i+advTime] - times[i];
+	        	if(len<tmp) {
+	        		start_time=i+1;
+	        		len = tmp;
+	        	}
+	        }
+	        
+	        int HH = start_time/3600;
+	        start_time%=3600;
+	        int MM = start_time/60;
+	        start_time%=60;
+	        int SS = start_time;
+	        
+	        answer = String.format("%02d:%02d:%02d", HH, MM, SS);
+	        
+	        return answer;
+	    }
+	}
