@@ -1,0 +1,133 @@
+class Solution {
+		
+		int N=0;
+		boolean[][][] matrix = new boolean[101][101][4];
+		
+		void install(int y1, int x1, int y2, int x2, int structure) {
+			if(structure==0) { // 기둥
+				if(y1==0 || (matrix[y1][x1][2] || matrix[y1][x1][3]) || matrix[y1][x1][0]) {
+					matrix[y1][x1][1] = true;
+					matrix[y2][x2][0] = true;
+				}
+			}else { // 보
+				if((matrix[y1][x1][0] || matrix[y2][x2][0]) || (matrix[y1][x1][2] && matrix[y2][x2][3])) {
+					matrix[y1][x1][3] = true;
+					matrix[y2][x2][2] = true;
+				}
+			}	
+		}
+		
+		boolean checking() {
+			for(int y1=0; y1<N; ++y1) {
+				for(int x1=0; x1<N; ++x1) {
+					int y2=0;
+					int x2=0;
+					if(matrix[y1][x1][1]) {
+						y2=y1+1;
+						x2=x1;
+						if(y1==0 || (matrix[y1][x1][2] || matrix[y1][x1][3]) || matrix[y1][x1][0]) {
+							
+						}else {
+							return false;
+						}
+					}
+					if(matrix[y1][x1][3]) {
+						y2=y1;
+						x2=x1+1;
+						if((matrix[y1][x1][0] || matrix[y2][x2][0]) || (matrix[y1][x1][2] && matrix[y2][x2][3])) {
+							
+						}else {
+							return false;
+						}
+					}
+				}
+			}
+			return true;
+		}
+		
+		void delete(int y1, int x1, int y2, int x2, int structure) {
+			if(structure==0) { // 기둥
+				matrix[y1][x1][1] = false;
+				matrix[y2][x2][0] = false;
+			}else { // 보
+				matrix[y1][x1][3] = false;
+				matrix[y2][x2][2] = false;
+			}
+			
+			if(!checking()) {
+				if(structure==0) { // 기둥
+					matrix[y1][x1][1] = true;
+					matrix[y2][x2][0] = true;
+				}else { // 보
+					matrix[y1][x1][3] = true;
+					matrix[y2][x2][2] = true;
+				}
+			}
+		}
+		
+		int[][] getStructure(){
+			int count=0;
+			for(int x=0; x<=N; ++x) {
+				for(int y=0; y<=N; ++y) {
+					if(matrix[y][x][1]) { // 기둥
+						count+=1;
+					}
+					if(matrix[y][x][3]) { // 보
+						count+=1;
+					}	
+				}
+			}
+			int[][] structures = new int[count][3];
+			int idx=0;
+			for(int x=0; x<=N; ++x) {
+				for(int y=0; y<=N; ++y) {
+					if(matrix[y][x][1]) { // 기둥
+						structures[idx][0]=x;
+						structures[idx][1]=y;
+						structures[idx][2]=0;
+						idx+=1;
+					}
+					if(matrix[y][x][3]) { // 보
+						structures[idx][0]=x;
+						structures[idx][1]=y;
+						structures[idx][2]=1;
+						idx+=1;
+					}	
+				}
+			}
+			return structures;
+		}
+		
+		
+	    public int[][] solution(int n, int[][] build_frame) {
+	        int[][] answer;
+	        
+	        N=n;
+	        
+	        for(int i=0; i<build_frame.length; ++i) {
+	        	int x1=build_frame[i][0];
+	        	int y1=build_frame[i][1];
+	        	int structure=build_frame[i][2];
+	        	int action=build_frame[i][3];
+	        	
+	        	int x2=0;
+				int y2=0;
+				if(structure==0) { // 기둥
+					x2=x1;
+					y2=y1+1;
+				}else { // 보
+					x2=x1+1;
+					y2=y1;
+				}
+				if(action==0) {
+					delete(y1, x1, y2, x2, structure);
+				}else {
+					install(y1, x1, y2, x2, structure);
+				}
+	        }
+	        
+	        answer = getStructure();
+	        
+	        return answer;
+	    }
+	}
