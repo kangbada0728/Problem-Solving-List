@@ -1,0 +1,45 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int solution(vector<int> stones, int k) {
+    int answer = 0;
+    
+    int left=0x7fffffff;
+    int right=0;
+    for(int n : stones){
+        if(n<left){
+            left=n;
+        }
+        if(n>right){
+            right=n;
+        }
+    }
+    
+    while(left<=right){
+        int mid = (left+right)/2;
+        int cnt=0;
+        int maxi=0;
+        for(int stone:stones){
+            if(stone-mid<=0){
+                cnt+=1;
+            }else{
+                maxi=max(maxi, cnt);
+                cnt=0;
+            }
+        }
+        maxi=max(maxi, cnt);
+        
+        if(maxi<k){
+            left=mid+1;
+        }else{
+            right=mid-1;
+        }
+    }
+    
+    answer = left;
+    
+    return answer;
+}
