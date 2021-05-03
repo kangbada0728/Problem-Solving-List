@@ -1,0 +1,72 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+int answer=0;
+
+vector<string> userId;
+vector<string> bannedId;
+
+
+
+void matching(vector<string> selected){
+    
+    do{
+        int cnt=0;
+        for(int i=0; i<bannedId.size(); ++i){
+            string a = selected[i];
+            string b = bannedId[i];
+            
+            if(a.size()!=b.size()){
+                break;
+            }else{
+                int i=0;
+                for(i=0; i<a.size(); ++i){
+                    if(b[i]!='*' && a[i]!=b[i]){
+                        break;
+                    }
+                }
+                if(i==a.size()){
+                    cnt+=1;
+                }else{
+                    break;
+                }
+            }
+        }
+        if(cnt==bannedId.size()){
+            answer+=1;
+            return;
+        }
+    }while(next_permutation(selected.begin(), selected.end()));
+}
+
+void selectUserId(vector<string>& selected, int idx){
+    if(selected.size()==bannedId.size()){
+        matching(selected);
+        return;
+    }
+    if(idx==userId.size()){
+        return;
+    }
+    
+    selected.push_back(userId[idx]);
+    selectUserId(selected, idx+1);
+    selected.pop_back();
+    selectUserId(selected, idx+1);
+}
+
+int solution(vector<string> user_id, vector<string> banned_id) {
+    
+    userId = user_id;
+    bannedId = banned_id;
+    
+    sort(userId.begin(), userId.end());
+    
+    vector<string> selected;
+    selectUserId(selected, 0);
+    
+    return answer;
+}
