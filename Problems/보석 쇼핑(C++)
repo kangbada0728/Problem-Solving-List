@@ -1,0 +1,75 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <tuple>
+#include <stack>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstring>
+
+using namespace std;
+
+vector<int> solution(vector<string> gems) {
+    vector<int> answer;
+    
+    set<string> tmp;
+    for(string s:gems){
+        tmp.insert(s);
+    }
+    int total_cnt = (int)tmp.size();
+    
+    map<string, int> mp;
+    int ans_len=1000000;
+    int ans_left=0;
+    int ans_right=0;
+    
+    mp.insert(make_pair(gems[0], 1));
+    if(mp.size()==total_cnt){
+        ans_len=1;
+    }
+    int leftp=0;
+    int rightp=0;
+    while(true){
+        
+        if(mp.size()<total_cnt){
+            rightp+=1;
+            if(rightp < gems.size()){
+                auto it = mp.find(gems[rightp]);
+                if(it==mp.end()){
+                    mp.insert(make_pair(gems[rightp], 1));
+                }else{
+                    it->second+=1;
+                }
+            }else{
+                break;
+            }
+        }else{
+            auto it = mp.find(gems[leftp]);
+            it->second-=1;
+            if(it->second==0){
+                mp.erase(it);
+            }
+            leftp+=1;
+        }
+        if(mp.size()==total_cnt){
+            int tmp_len = rightp-leftp+1;
+            if(tmp_len < ans_len){
+                ans_len=tmp_len;
+                ans_left=leftp;
+                ans_right=rightp;
+            }else if(tmp_len==ans_len && leftp<ans_left){
+                ans_left=leftp;
+                ans_right=rightp;
+            }
+        }
+        
+    }
+    
+    answer.push_back(ans_left+1);
+    answer.push_back(ans_right+1);
+    
+    return answer;
+}
