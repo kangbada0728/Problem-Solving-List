@@ -1,0 +1,82 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <tuple>
+#include <stack>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstring>
+
+using namespace std;
+
+int N=0;
+vector<vector<int>> matrix;
+int costs[26][26];
+int dx[4] = {0, 0, 1, -1};
+int dy[4] = {1, -1, 0, 0};
+int dcost[4][4] = {{100, 1000, 600, 600}, {1000, 100, 600, 600}, {600, 600, 100, 1000}, {600, 600, 1000, 100}};
+
+class Car{
+public:
+    int x;
+    int y;
+    int dir;
+    int cost;
+    
+    Car(int x, int y, int dir, int cost){
+        this->x=x;
+        this->y=y;
+        this->dir=dir;
+        this->cost=cost;
+    }
+    
+    void move(queue<Car>& q){
+        for(int d=0; d<4; ++d){
+            int nx=x+dx[d];
+            int ny=y+dy[d];
+            int nd=d;
+            
+            if(0<=nx && nx<N && 0<=ny && ny<N && matrix[nx][ny]==0){
+                int ncost = cost + dcost[dir][nd];
+                if(costs[nx][ny] >= ncost){
+                    q.push({nx, ny, nd, ncost});
+                    costs[nx][ny] = ncost;
+                }
+            }
+        }
+    }
+};
+
+
+int solution(vector<vector<int>> board) {
+    int answer = 0;
+    
+    N = (int)board.size();
+    matrix=board;
+    for(int i=0; i<N; ++i){
+        for(int j=0; j<N; ++j){
+            costs[i][j]=0x7fffffff;
+        }
+    }
+    costs[0][0]=0;
+    
+    queue<Car> q;
+    q.push({0, 0, 0, 0});
+    q.push({0, 0, 2, 0});
+    while(!q.empty()){
+        Car car = q.front();
+        q.pop();
+        
+        if(car.x==N-1 && car.y==N-1){
+            continue;
+        }
+        
+        car.move(q);
+    }
+    answer = costs[N-1][N-1];
+    
+    return answer;
+}
