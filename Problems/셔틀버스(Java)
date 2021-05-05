@@ -1,0 +1,51 @@
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+class Solution {
+	    public String solution(int n, int t, int m, String[] timetable) {
+	        String answer = "";
+	        
+	        Pattern p = Pattern.compile("(..):(..)");
+	        Matcher matcher;
+	        
+	        int[] person_come_time = new int[timetable.length];
+	        
+	        int i=0;
+	        for(String s:timetable) {
+	        	matcher = p.matcher(s);
+	        	if(matcher.find()) {
+	        		person_come_time[i++] = Integer.parseInt(matcher.group(1))*60 + Integer.parseInt(matcher.group(2));
+	        	}
+	        }
+	        
+	        Arrays.sort(person_come_time);
+	        
+	        int time = 9*60;
+	        int[] bus_time = new int[n];
+	        bus_time[0] = time;
+	        for(i=1; i<n; ++i) {
+	        	bus_time[i] = bus_time[i-1] + t;
+	        }
+	        
+	        int[] last_enter_time = new int[n];
+	        int[] enter_cnt = new int[n];
+	        
+	        int j=0;
+	        for(i=0; i<n; ++i) { 	
+	        	for(; j<person_come_time.length && enter_cnt[i]<m && person_come_time[j]<=bus_time[i]; ++j) {
+	        		last_enter_time[i]=person_come_time[j];
+	        		enter_cnt[i]+=1;
+	        	}
+	        }
+	        
+	        if(enter_cnt[n-1]<m) {
+	        	answer = String.format("%02d:%02d", bus_time[n-1]/60, bus_time[n-1]%60);
+	        }else {
+	        	int tt = last_enter_time[n-1]-1;
+	        	answer = String.format("%02d:%02d", tt/60, tt%60);
+	        }
+	        
+	        return answer;
+	    }
+	}
