@@ -1,0 +1,22 @@
+import java.util.*;
+
+class Solution {
+    public String reverseWords(String s) {
+        
+        StringBuilder sb = new StringBuilder();
+        
+        StringTokenizer st = new StringTokenizer(s);
+        Stack<String> stk = new Stack<>();
+        while(st.hasMoreTokens()){
+            stk.add(st.nextToken());
+        }
+        while(!stk.isEmpty()){
+            sb.append(stk.pop());
+            if(!stk.isEmpty()){
+                sb.append(" ");
+            }
+        }
+        
+        return sb.toString();
+    }
+}
