@@ -1,0 +1,40 @@
+class Solution {
+    public int numIslands(char[][] grid) {
+        
+        int N=grid.length;
+        int M=grid[0].length;
+        int[] dx = {0, 0, 1, -1};
+        int[] dy = {1, -1, 0, 0};
+        
+        int cnt=0;
+        for(int i=0; i<N; ++i){
+            for(int j=0; j<M; ++j){
+                if(grid[i][j]=='1'){
+                    cnt +=1;
+                    
+                    Queue<Integer> q = new LinkedList<>();
+                    q.add(i*M + j);
+                    grid[i][j] = '0';
+                    
+                    while(!q.isEmpty()){
+                        int n = q.poll();
+                        int x = n/M;
+                        int y = n%M;
+                        
+                        for(int p=0; p<4; ++p){
+                            int nx = x + dx[p];
+                            int ny = y + dy[p];
+                            
+                            if(0<=nx && nx<N && 0<=ny && ny<M && grid[nx][ny]=='1'){
+                                q.add(nx*M+ny);
+                                grid[nx][ny] = '0';
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return cnt;
+    }
+}
