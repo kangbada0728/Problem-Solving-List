@@ -1,0 +1,56 @@
+class Solution {
+    
+    class Node{
+        int x;
+        int y;
+        int c;
+        
+        Node(int x, int y, int c){
+            this.x = x;
+            this.y = y;
+            this.c = c;
+        }
+    }
+    
+    
+    static final int INF = 2147483647;
+    static int N=0;
+    static int M=0;
+    static final int[] dx = {0, 0, 1, -1};
+    static final int[] dy = {1, -1, 0, 0};
+    
+    public void wallsAndGates(int[][] rooms) {
+        
+        N = rooms.length;
+        M = rooms[0].length;
+        
+        Queue<Node> q = new LinkedList<>();
+        for(int i=0; i<N; ++i){
+            for(int j=0; j<M; ++j){
+                if(rooms[i][j]==0){
+                    q.add(new Node(i, j, 0));
+                }
+            }
+        }
+        
+        while(!q.isEmpty()){
+            
+            Node node = q.poll();
+            int x = node.x;
+            int y = node.y;
+            int c = node.c;
+
+            for(int p=0; p<4; ++p){
+                int nx = x + dx[p];
+                int ny = y + dy[p];
+                int nc = c + 1;
+
+                if(0<=nx && nx<N && 0<=ny && ny<M && rooms[nx][ny] == INF){
+                    q.add(new Node(nx, ny, nc));
+                    rooms[nx][ny] = nc;
+                }
+            }
+        }
+        
+    }
+}
