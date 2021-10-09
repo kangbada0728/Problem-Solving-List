@@ -1,40 +1,40 @@
-import java.util.*;
-
 class Solution {
     public int openLock(String[] deadends, String target) {
         
-        Set<String> deadend = new HashSet<>();
-        for(String s : deadends){
-            deadend.add(s);
+        Set<String> visited = new HashSet<>();
+        for(String s:deadends){
+            visited.add(s);
         }
         
         Queue<String> q = new LinkedList<>();
-        q.add("0000");
-        q.add(null);
         
-        Set<String> seen = new HashSet<>();
-        seen.add("0000");
+        if(!visited.contains("0000")){
+            q.add("0000");
+            visited.add("0000");
+            q.add(null);
+        }
         
         int cnt=0;
         while(!q.isEmpty()){
             
             String num = q.poll();
             
-            if(num==null){
+            if(num == null){
                 cnt+=1;
-                if(q.peek() != null){
-                    q.add(null);
-                }  
+                q.add(null);
+                if(q.peek() == null){
+                    q.poll();
+                }
             }else if(num.equals(target)){
                 return cnt;
-            }else if(!deadend.contains(num)) {
+            }else{
                 for(int i=0; i<4; ++i){
                     for(int j=-1; j<=1; j+=2){
-                        int c = ((num.charAt(i)-'0') + j + 10) % 10;
-                        String next = num.substring(0, i) + ("" + c) + num.substring(i+1);
-                        if(!seen.contains(next)){
+                        int nn = ((num.charAt(i) - '0') + j + 10) % 10;
+                        String next = num.substring(0, i) + (""+nn) + num.substring(i+1);
+                        if(!visited.contains(next)){
                             q.add(next);
-                            seen.add(next);
+                            visited.add(next);
                         }
                     }
                 }
