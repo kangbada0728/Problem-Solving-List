@@ -1,0 +1,36 @@
+class Solution {
+    
+    private int idx = 0;
+    
+    public String decodeString(String s) {
+        
+        StringBuilder sb = new StringBuilder();
+        
+        while(idx < s.length() && s.charAt(idx) != ']') {
+            
+            if(!Character.isDigit(s.charAt(idx))) {
+                sb.append(s.charAt(idx));
+                idx+=1;
+                
+            }else{
+                
+                int sum = 0;
+                while(s.charAt(idx) != '[') {
+                    sum *= 10;
+                    sum += (s.charAt(idx) - '0');
+                    idx += 1;
+                }
+                idx+=1;
+                
+                String str = decodeString(s);
+                idx +=1;
+                
+                while(sum-- > 0){
+                    sb.append(str);
+                }
+            }
+        }
+        
+        return sb.toString();
+    }
+}
