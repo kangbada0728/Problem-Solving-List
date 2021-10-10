@@ -1,0 +1,39 @@
+class Solution {
+    public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
+        
+        int[] dx = {0, 0, 1, -1};
+        int[] dy = {1, -1, 0, 0};
+        
+        int N = image.length;
+        int M = image[0].length;
+        
+        boolean[][] visit = new boolean[N][M];
+        
+        int color = image[sr][sc];
+        
+        Queue<int[]> q = new LinkedList<>();
+        
+        q.add(new int[]{sr, sc});
+        visit[sr][sc] = true;
+        
+        while(!q.isEmpty()) {
+            int x = q.peek()[0];
+            int y = q.peek()[1];
+            q.poll();
+            
+            image[x][y] = newColor;
+            
+            for(int i=0; i<4; ++i) {
+                int nx = x + dx[i];
+                int ny = y + dy[i];
+                
+                if(0<=nx && nx<N && 0<=ny && ny<M && image[nx][ny]==color && !visit[nx][ny]) {
+                    q.add(new int[]{nx, ny});
+                    visit[nx][ny] = true;
+                }
+            }
+        }
+        
+        return image;
+    }
+}
