@@ -1,0 +1,61 @@
+class Solution {
+    public int search(int[] nums, int target) {
+        
+        int left = 0;
+        int right = nums.length - 1;
+        
+        if(left==right){
+            if(nums[0]==target){
+                return 0;
+            }else{
+                return -1;
+            }
+        }
+        
+        while(left+1 != right) {
+            int mid = (left + right) / 2;
+            
+            if(nums[left] <= nums[mid]) {
+                left = mid;
+            }else if(nums[mid] < nums[right]) {
+                right = mid;
+            }
+        }
+        
+        
+        int l1 = 0;
+        int r1 = left;
+        while(l1<=r1) {
+            int mid = (l1 + r1) / 2;
+            int midV = nums[mid];
+            
+            if(nums[mid]==target) {
+                return mid;
+            }else if(midV < target) {
+                l1 = mid + 1;
+            }else{
+                r1 = mid - 1;
+            }
+        }
+        
+        int l2 = right;
+        int r2 = nums.length - 1;
+        while(l2<=r2) {
+            int mid = (l2 + r2) / 2;
+            int midV = nums[mid];
+            
+            if(nums[mid]==target) {
+                return mid;
+            }else if(midV < target) {
+                l2 = mid + 1;
+            }else{
+                r2 = mid - 1;
+            }
+        }
+        
+        
+        
+        
+        return -1;
+    }
+}
