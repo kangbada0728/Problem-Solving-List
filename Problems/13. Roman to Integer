@@ -1,0 +1,66 @@
+class Solution {
+    
+    static Map<String, Integer> values = new HashMap<>();
+    
+    static {
+        values.put("I", 1);
+        values.put("V", 5);
+        values.put("X", 10);
+        values.put("L", 50);
+        values.put("C", 100);
+        values.put("D", 500);
+        values.put("M", 1000);
+        values.put("IV", 4);
+        values.put("IX", 9);
+        values.put("XL", 40);
+        values.put("XC", 90);
+        values.put("CD", 400);
+        values.put("CM", 900);
+    }
+    
+    public int romanToInt(String s) {
+        
+        int sum=0;
+        int len = s.length();
+        
+        for(int i=0; i<len;){
+            char c = s.charAt(i);
+            
+            if(c=='I') {
+                
+                if(i+1<len && (s.charAt(i+1)=='V' || s.charAt(i+1)=='X')){
+                    sum += values.get(s.substring(i, i+2));
+                    i+=2;
+                }else{
+                    sum += values.get(""+ c);
+                    i+=1;
+                }
+                
+            }else if(s.charAt(i)=='X') {
+                if(i+1<len && (s.charAt(i+1)=='L' || s.charAt(i+1)=='C')){
+                    sum += values.get(s.substring(i, i+2));
+                    i+=2;
+                }else{
+                    sum += values.get(""+ c);
+                    i+=1;
+                }
+                
+            }else if(s.charAt(i)=='C') {
+                if(i+1<len && (s.charAt(i+1)=='D' || s.charAt(i+1)=='M')){
+                    sum += values.get(s.substring(i, i+2));
+                    i+=2;
+                }else{
+                    sum += values.get(""+ c);
+                    i+=1;
+                }
+                
+            }else{
+                sum += values.get(s.substring(i, i+1));
+                i+=1;
+            }
+        }
+        
+        return sum;
+        
+    }
+}
