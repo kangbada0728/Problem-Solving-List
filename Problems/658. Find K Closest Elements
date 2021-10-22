@@ -1,9 +1,9 @@
 class Solution {
     public List<Integer> findClosestElements(int[] arr, int k, int x) {
-        List<Integer> result = new ArrayList<>();
         
+        List<Integer> result = new ArrayList<>();
         if(arr.length == k) {
-            for(int i=0; i<k; ++i){
+            for(int i=0; i<k; ++i) {
                 result.add(arr[i]);
             }
             return result;
@@ -11,42 +11,43 @@ class Solution {
         
         
         int left = 0;
-        int right = arr.length-1;
+        int right = arr.length - 1;
+        
         while(left < right) {
-            int mid = (left+right) / 2;
-            if(x <= arr[mid]){
+            int mid = (left+right)/2;
+            
+            if(x <= arr[mid]) {
                 right = mid;
             }else{
-                left = mid+1;
+                left = mid + 1;
             }
         }
         
-        left -= 1;
-        System.out.println(left + " " + right);
+        left -=1;
         
-        while(right-left-1 < k) {
+        while(right - left - 1 < k) {
             
-            if(left==-1){
-                right+=1;
+            if(left == -1) {
+                right += 1;
                 continue;
             }
-            if(right==arr.length){
-                left-=1;
+            if(right == arr.length) {
+                left -= 1;
                 continue;
             }
             
-            if(Math.abs(arr[left]-x) <= Math.abs(arr[right]-x)) {
-                left-=1;
+            if(Math.abs(arr[left] - x) <= Math.abs(arr[right] - x)) {
+                left -= 1;
             } else {
-                right+=1;
+                right += 1;
             }
         }
         
-        
-        for(int i=left+1; i<right; ++i){
+        for(int i = left+1; i<right; ++i){
             result.add(arr[i]);
         }
         
         return result;
     }
 }
+
