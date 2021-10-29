@@ -1,0 +1,28 @@
+class Solution {
+    public int maxProfit(int[] prices) {
+        
+        Stack<int[]> stk = new Stack<>();
+        
+        int maxVal = 0;
+        for(int p : prices) {
+            if(stk.isEmpty()) {
+                stk.add(new int[]{p, 0});
+                
+            } else {
+                while(!stk.isEmpty() && stk.peek()[0]>=p) {
+                    stk.pop();
+                }
+                if(stk.isEmpty()) {
+                    stk.add(new int[]{p, 0});
+                } else {
+                    int diff = p - stk.peek()[0] + stk.peek()[1];
+                    stk.add(new int[]{p, diff});
+                    maxVal = Math.max(maxVal, diff);
+                }
+            }
+        }
+        
+        return maxVal;
+        
+    }
+}
