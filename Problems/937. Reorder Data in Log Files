@@ -1,0 +1,74 @@
+import java.util.*;
+
+class Solution {
+    
+    class Log implements Comparable<Log> {
+        private int order;
+        private String id;
+        private String arr;
+        private boolean ld; //Letter true, Digit false
+        
+        public Log(int order, String s) {
+            this.order = order;
+            String[] split = s.split(" ", 2);
+            id = split[0];
+            arr = split[1];
+            
+            if(Character.isDigit(arr.charAt(0))) {
+                ld = false;
+            } else {
+                ld = true;
+            }
+        }
+        
+        @Override
+        public int compareTo(Log log) {
+            
+            if(ld == log.ld) {
+                if(ld) {
+                    
+                    int cmp = arr.compareTo(log.arr);
+                    if(cmp != 0){
+                        return cmp;
+                    }
+                    return id.compareTo(log.id);
+                    
+                } else{
+                    
+                    return Integer.compare(order, log.order);
+                }
+                
+            } else{
+                
+                return ld==true ? -1 : 1;
+            }
+        }
+        
+        @Override
+        public String toString() {
+            return id + " " + arr;
+        }
+    }
+    
+    
+    
+    public String[] reorderLogFiles(String[] logs) {
+        
+        int len = logs.length;
+        Log[] lll = new Log[len];
+        
+        for(int i=0; i<len; ++i) {
+            
+            lll[i] = new Log(i, logs[i]);
+        }
+        
+        Arrays.sort(lll);
+        
+        String[] result = new String[len];
+        for(int i=0; i<len; ++i) {
+            result[i] = lll[i].toString();
+        }
+        
+        return result;
+    }
+}
