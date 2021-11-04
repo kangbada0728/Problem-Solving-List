@@ -1,0 +1,57 @@
+class MaxStack {
+
+    Stack<Integer> stk;
+    Stack<Integer> maxStk;
+    
+    public MaxStack() {
+        stk = new Stack<>();
+        maxStk = new Stack<>();
+    }
+    
+    public void push(int x) {
+        stk.add(x);
+        if(maxStk.isEmpty()) {
+            maxStk.add(x);
+        } else {
+            maxStk.add(maxStk.peek() < x ? x : maxStk.peek());
+        }
+    }
+    
+    public int pop() {
+        maxStk.pop();
+        return stk.pop();
+    }
+    
+    public int top() {
+        return stk.peek();
+    }
+    
+    public int peekMax() {
+        return maxStk.peek();
+    }
+    
+    public int popMax() {
+        int maxi = maxStk.peek();
+        
+        Stack<Integer> temp = new Stack<>();
+        while(top() != maxi) {
+            temp.add(pop());
+        }
+        pop();
+        while(!temp.isEmpty()) {
+            push(temp.pop());
+        }
+        
+        return maxi;
+    }
+}
+
+/**
+ * Your MaxStack object will be instantiated and called as such:
+ * MaxStack obj = new MaxStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.peekMax();
+ * int param_5 = obj.popMax();
+ */
