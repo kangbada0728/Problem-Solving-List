@@ -1,0 +1,40 @@
+class Solution {
+    
+    class Box implements Comparable<Box> {
+        int cnt;
+        int amount;
+        
+        public Box(int[] box) {
+            cnt = box[0];
+            amount = box[1];
+        }
+        
+        @Override
+        public int compareTo(Box o) {
+            return Integer.compare(o.amount, amount);
+        }
+    }
+    
+    public int maximumUnits(int[][] boxTypes, int truckSize) {
+        
+        List<Box> ls = new ArrayList<>();
+        for(int i=0; i<boxTypes.length; ++i) {
+            ls.add(new Box(boxTypes[i]));
+        }
+        
+        Collections.sort(ls);
+        
+        int sum = 0;
+        for(int i=0;  i < ls.size(); ++i) {
+            if(truckSize > ls.get(i).cnt) {
+                sum += ls.get(i).cnt * ls.get(i).amount;
+                truckSize -= ls.get(i).cnt;
+            } else {
+                sum += truckSize * ls.get(i).amount;
+                break;
+            }
+        }
+        
+        return sum;
+    }
+}
