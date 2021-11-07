@@ -1,0 +1,1 @@
+DELETE a FROM Person a join Person b ON a.email=b.email AND a.id > b.id;
