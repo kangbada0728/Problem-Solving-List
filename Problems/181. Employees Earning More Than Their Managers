@@ -1,0 +1,1 @@
+SELECT a.name AS 'Employee' FROM Employee a join Employee b ON a.managerId = b.id AND a.salary > b.salary;
