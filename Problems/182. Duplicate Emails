@@ -1,0 +1,2 @@
+# Write your MySQL query statement below
+SELECT a.email FROM Person a join Person b ON a.email=b.email AND a.id!=b.id GROUP BY a.email;
