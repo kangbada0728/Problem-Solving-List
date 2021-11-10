@@ -1,0 +1,14 @@
+# Write your MySQL query statement below
+SELECT 
+    customer_id, name 
+FROM
+    Orders
+    join Product using (product_id)
+    join Customers using (customer_id)
+WHERE
+    order_date BETWEEN '2020-06-01' AND '2020-07-31'
+GROUP BY
+    customer_id
+HAVING
+    sum(case when MONTH(order_date)='06' then price*quantity else 0 end) >= 100 AND
+    sum(case when MONTH(order_date)='07' then price*quantity else 0 end) >= 100;
