@@ -1,8 +1,7 @@
 # Write your MySQL query statement below
-SELECT 
-    customer_id, name 
-FROM
-    Orders
+SELECT customer_id, name
+FROM 
+    Orders 
     join Product using (product_id)
     join Customers using (customer_id)
 WHERE
@@ -10,5 +9,5 @@ WHERE
 GROUP BY
     customer_id
 HAVING
-    sum(case when MONTH(order_date)='06' then price*quantity else 0 end) >= 100 AND
-    sum(case when MONTH(order_date)='07' then price*quantity else 0 end) >= 100;
+    sum(case when month(order_date)='06' then price*quantity else 0 end) >= 100 and
+    sum(case when month(order_date)='07' then price*quantity else 0 end) >= 100;
