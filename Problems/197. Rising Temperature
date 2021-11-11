@@ -1,0 +1,5 @@
+# Write your MySQL query statement below
+SELECT id
+FROM Weather a
+WHERE temperature > (select temperature from weather where recordDate=subdate(a.recordDate, 1));
+
