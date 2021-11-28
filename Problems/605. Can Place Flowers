@@ -1,0 +1,33 @@
+class Solution {
+    public boolean canPlaceFlowers(int[] flowerbed, int n) {
+        
+        int idx = 0;
+        int N = flowerbed.length;
+        int cnt=0;
+        while(idx < N) {
+            if(flowerbed[idx]==0){
+                boolean flag = true;
+                if(0<=idx-1 && flowerbed[idx-1]==1) {
+                    flag = false;
+                }
+                if(idx+1<N && flowerbed[idx+1]==1) {
+                    flag = false;
+                }
+            
+                if(flag) {
+                    flowerbed[idx] = 1;
+                    idx+=2;
+                    cnt+=1;
+                } else {
+                    idx += 1;
+                }
+            }else {
+                idx += 1;
+            }
+        }
+        
+        
+        return cnt>=n;
+        
+    }
+}
