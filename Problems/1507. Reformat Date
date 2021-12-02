@@ -1,0 +1,46 @@
+class Solution {
+    public String reformatDate(String date) {
+        
+        String[] ddd = date.split(" ");
+        
+        String YYYY = ddd[2];
+        
+        String mm = ddd[1];
+        String MM = "";
+        if(mm.equals("Jan")) {
+            MM = "01";
+        } else if(mm.equals("Feb")) {
+            MM = "02";
+        } else if(mm.equals("Mar")) {
+            MM = "03";
+        } else if(mm.equals("Apr")) {
+            MM = "04";
+        } else if(mm.equals("May")) {
+            MM = "05";
+        } else if(mm.equals("Jun")) {
+            MM = "06";
+        } else if(mm.equals("Jul")) {
+            MM = "07";
+        } else if(mm.equals("Aug")) {
+            MM = "08";
+        } else if(mm.equals("Sep")) {
+            MM = "09";
+        } else if(mm.equals("Oct")) {
+            MM = "10";
+        } else if(mm.equals("Nov")) {
+            MM = "11";
+        } else {
+            MM = "12";
+        }
+        
+        String DD = "";
+        if(ddd[0].length() == 3) {
+            DD = "0" + ddd[0].charAt(0);
+        } else {
+            DD = ddd[0].substring(0, 2);
+        }
+        
+        
+        return YYYY + "-" + MM + "-" + DD;
+    }
+}
