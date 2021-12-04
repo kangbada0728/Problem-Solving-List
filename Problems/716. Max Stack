@@ -1,39 +1,40 @@
 class MaxStack {
-    
-    private Stack<Integer> stk;
-    private Stack<Integer> maxStk;
 
+    private Stack<Integer> stk1;
+    private Stack<Integer> stk2;
+    
     public MaxStack() {
-        stk = new Stack<>();
-        maxStk = new Stack<>();
+        stk1 = new Stack<>();
+        stk2 = new Stack<>();
     }
     
     public void push(int x) {
-        stk.add(x);
-        if(maxStk.isEmpty()){
-            maxStk.add(x);
-        }else {
-            maxStk.add(x > maxStk.peek() ? x : maxStk.peek());
+        stk1.add(x);
+        if(stk2.isEmpty()) {
+            stk2.add(x);
+        } else {
+            stk2.add(stk2.peek()>x ? stk2.peek() : x);
         }
     }
     
     public int pop() {
-        maxStk.pop();
-        return stk.pop();
+        stk2.pop();
+        return stk1.pop();
     }
     
     public int top() {
-        return stk.peek();
+        return stk1.peek();
     }
     
     public int peekMax() {
-        return maxStk.peek();
+        return stk2.peek();
     }
     
     public int popMax() {
-        int max = maxStk.peek();
         Stack<Integer> tmp = new Stack<>();
-        while(top() != max) {
+        
+        int max = peekMax();
+        while(max!=stk1.peek()) {
             tmp.add(pop());
         }
         pop();
