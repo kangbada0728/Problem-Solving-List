@@ -1,0 +1,46 @@
+class Solution {
+    public void wallsAndGates(int[][] rooms) {
+        
+        Queue<int[]> q = new LinkedList<>();
+        
+        int[] dx = {0, 0, 1, -1};
+        int[] dy = {1, -1, 0, 0};
+        
+        int N = rooms.length;
+        int M = rooms[0].length;
+        for(int i=0; i<N; ++i) {
+            for(int j=0; j<M; ++j) {
+                if(rooms[i][j]==0) {
+                    q.add(new int[]{i, j});
+                }
+            }
+        }
+        
+        while(!q.isEmpty()) {
+            int n = q.size();
+            while(n-->0) {
+                
+                int x = q.peek()[0];
+                int y = q.peek()[1];
+                q.poll();
+                
+                
+                for(int i=0; i<4; ++i) {
+                    int nx = x + dx[i];
+                    int ny = y + dy[i];
+                    
+                    if(0<=nx && nx<N && 0<=ny && ny<M) {
+                        if(rooms[nx][ny] != -1 && rooms[nx][ny] > rooms[x][y] + 1) {
+                            q.add(new int[]{nx, ny});
+                            rooms[nx][ny] = rooms[x][y] + 1;
+                        }
+                    }
+                }
+            }
+        }
+        
+        
+        
+        
+    }
+}
