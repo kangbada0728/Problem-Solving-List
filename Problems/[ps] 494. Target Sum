@@ -1,0 +1,27 @@
+
+iclass Solution {
+    
+    private int ans=0;
+    private int tar=0;
+    
+    public int findTargetSumWays(int[] nums, int target) {
+        
+        tar = target;
+        dfs(nums, 0, 0);
+        
+        return ans;
+    }
+    
+    void dfs(int[] nums, int idx, int res) {
+        if(idx == nums.length) {
+            if(res==tar) {
+                ans+=1;
+            }
+            return;
+        }
+        
+        dfs(nums, idx + 1, res+nums[idx]);
+        dfs(nums, idx + 1, res-nums[idx]);
+    }
+    
+}
