@@ -1,0 +1,39 @@
+class Solution {
+    
+    private String str;
+    private int idx=0;
+    
+    public String decodeString(String s) {    
+        str = s;
+        return dfs();
+    }
+    
+    private String dfs() {
+        
+        StringBuilder s = new StringBuilder();
+        int num=0;
+        while(idx < str.length()) {
+            char c = str.charAt(idx);
+            if('a'<=c && c<='z') {
+                s.append(c);
+                idx+=1;
+            } else if ('0'<=c && c<='9') {
+                num = 10*num + (c-'0');
+                idx+=1;
+            } else if(c==']') {
+                idx+=1;
+                return s.toString();
+            } else { // [
+                idx+=1;
+                String tmp = dfs();
+                while(num-->0) {
+                    s.append(tmp);
+                }
+                num=0;
+            }
+        }
+        
+        return s.toString();
+    }
+    
+}
