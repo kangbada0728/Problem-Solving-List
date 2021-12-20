@@ -1,44 +1,42 @@
 class Solution {
     public int openLock(String[] deadends, String target) {
         
-        Set<String> visited = new HashSet<>();
-        for(String s:deadends){
-            visited.add(s);
+        Set<String> set = new HashSet<>();
+        for(String s : deadends) {
+            set.add(s);
+        }
+        if(set.contains("0000")) {
+            return -1;
         }
         
         Queue<String> q = new LinkedList<>();
+        q.add("0000");
+        set.add("0000");
         
-        if(!visited.contains("0000")){
-            q.add("0000");
-            visited.add("0000");
-            q.add(null);
-        }
         
         int cnt=0;
-        while(!q.isEmpty()){
+        while(!q.isEmpty()) {
+            int N = q.size();
             
-            String num = q.poll();
-            
-            if(num == null){
-                cnt+=1;
-                q.add(null);
-                if(q.peek() == null){
-                    q.poll();
+            while(N-->0) {
+                String s = q.poll();
+                
+                if(s.equals(target)) {
+                    return cnt;
                 }
-            }else if(num.equals(target)){
-                return cnt;
-            }else{
-                for(int i=0; i<4; ++i){
-                    for(int j=-1; j<=1; j+=2){
-                        int nn = ((num.charAt(i) - '0') + j + 10) % 10;
-                        String next = num.substring(0, i) + (""+nn) + num.substring(i+1);
-                        if(!visited.contains(next)){
-                            q.add(next);
-                            visited.add(next);
+                
+                for(int i=0; i<4; ++i) {
+                    for(int j=-1; j<2; j+=2) {
+                        int n = ((s.charAt(i) - '0') + j + 10) % 10;
+                        String str = s.substring(0, i) + n + s.substring(i+1, s.length());
+                        if(!set.contains(str)) {
+                            q.add(str);
+                            set.add(str);
                         }
                     }
                 }
             }
+            cnt+=1;
         }
         
         return -1;
