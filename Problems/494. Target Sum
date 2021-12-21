@@ -1,24 +1,36 @@
 class Solution {
     
-    private int ans=0;
-    private int tar=0;
+    private int[] nums;
+    private int total;
+    private int[][] memo;
+    private int target;
     
     public int findTargetSumWays(int[] nums, int target) {
         
-        tar = target;
-        dfs(nums, 0, 0);   
-        return ans;
-    }
-    
-    void dfs(int[] nums, int idx, int res) {
-        if(idx == nums.length) {
-            if(res==tar) {
-                ans+=1;
-            }
-            return;
+        this.nums = nums;
+        this.target = target;
+        
+        total = Arrays.stream(nums).sum();
+        memo = new int[nums.length][2*total+1];
+        for(int i=0; i<nums.length; ++i) {
+            Arrays.fill(memo[i], Integer.MIN_VALUE);
         }
         
-        dfs(nums, idx + 1, res+nums[idx]);
-        dfs(nums, idx + 1, res-nums[idx]);
+        return dfs(0, 0);
+    }
+    
+    private int dfs(int idx, int sum) {
+        if(idx == nums.length) {
+            return sum==target ? 1 : 0;
+        }
+        if(memo[idx][sum+total] != Integer.MIN_VALUE) {
+            return memo[idx][sum+total];
+        }
+        
+        int add = dfs(idx+1, sum+nums[idx]);
+        int sub = dfs(idx+1, sum-nums[idx]);
+        memo[idx][sum + total] = add+sub;
+        
+        return memo[idx][sum + total];
     }
 }
