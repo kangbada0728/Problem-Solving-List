@@ -1,0 +1,57 @@
+class Solution {
+    public String addStrings(String num1, String num2) {
+        
+        StringBuilder sb1 = new StringBuilder(num1);
+        StringBuilder sb2 = new StringBuilder(num2);
+        sb1 = sb1.reverse();
+        sb2 = sb2.reverse();
+        
+        StringBuilder ans = new StringBuilder();
+        
+        int carry = 0;
+        int i=0;
+        for(; i<sb1.length() && i<sb2.length(); ++i) {
+            
+            int a = Integer.parseInt(sb1.charAt(i)+"");
+            int b = Integer.parseInt(sb2.charAt(i)+"");
+            
+            int c = a + b + carry;
+            carry = 0;
+            
+            if(c>=10) {
+                carry = 1;
+                c-=10;
+            }
+            ans.append(c);
+        }
+        
+        while(i<sb1.length()) {
+            int a = Integer.parseInt(sb1.charAt(i)+"");
+            int c = a + carry;
+            carry = 0;
+            if(c>=10) {
+                carry = 1;
+                c-=10;
+            }
+            ans.append(c);
+            i+=1;
+        }
+        while(i<sb2.length()) {
+            int b = Integer.parseInt(sb2.charAt(i)+"");
+            int c = b + carry;
+            carry = 0;
+            if(c>=10) {
+                carry = 1;
+                c-=10;
+            }
+            ans.append(c);
+            i+=1;
+        }
+        if(carry>0){
+            ans.append(carry);
+        }
+        ans = ans.reverse();
+        
+        return ans.toString();
+    }
+}
