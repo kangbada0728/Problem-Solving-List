@@ -1,36 +1,38 @@
 class Solution {
     
-    private int[] nums;
-    private int total;
+    private int sum;
+    private int N;
     private int[][] memo;
+    
+    private int[] nums;
     private int target;
     
+    
     public int findTargetSumWays(int[] nums, int target) {
+        sum = Arrays.stream(nums).sum();
+        N = nums.length;
+        memo = new int[N][2*sum+1];
+        for(int i=0; i<N; ++i) {
+            Arrays.fill(memo[i], -1);
+        }
         
         this.nums = nums;
         this.target = target;
         
-        total = Arrays.stream(nums).sum();
-        memo = new int[nums.length][2*total+1];
-        for(int i=0; i<nums.length; ++i) {
-            Arrays.fill(memo[i], Integer.MIN_VALUE);
-        }
-        
         return dfs(0, 0);
     }
     
-    private int dfs(int idx, int sum) {
-        if(idx == nums.length) {
-            return sum==target ? 1 : 0;
+    private int dfs(int i, int current) {
+        if(i==N) {
+            return current==target ? 1 : 0;
         }
-        if(memo[idx][sum+total] != Integer.MIN_VALUE) {
-            return memo[idx][sum+total];
+        if(memo[i][current+sum] != -1) {
+            return memo[i][current+sum];
         }
         
-        int add = dfs(idx+1, sum+nums[idx]);
-        int sub = dfs(idx+1, sum-nums[idx]);
-        memo[idx][sum + total] = add+sub;
-        
-        return memo[idx][sum + total];
+        int sub = dfs(i+1, current+nums[i]);
+        int add = dfs(i+1, current-nums[i]);
+        memo[i][current+sum] = sub + add;
+        return memo[i][current+sum];
     }
 }
