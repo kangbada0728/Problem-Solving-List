@@ -1,0 +1,31 @@
+class Solution {
+    
+    private int[] memo;
+    private int n;
+    
+    public int climbStairs(int n) {
+        
+        memo = new int[n+1];
+        Arrays.fill(memo, -1);
+        this.n = n;
+        
+        return dfs(0);
+    }
+    
+    private int dfs(int num) {
+        if(num==n) {
+            return 1;
+        }
+        if(num>n) {
+            return 0;
+        }
+        if(memo[num] != -1) {
+            return memo[num];
+        }
+        
+        int s1 = dfs(num+1);
+        int s2 = dfs(num+2);
+        memo[num] = s1+s2;
+        return memo[num];
+    }
+}
