@@ -1,0 +1,16 @@
+class Solution {
+    public int finalValueAfterOperations(String[] operations) {
+        String a = "--X";
+        String b = "X--";
+        
+        int x=0;
+        for(String s:operations) {
+            if(s.equals(a) || s.equals(b)) {
+                x--;
+            } else {
+                x++;
+            }
+        }
+        return x;
+    }
+}
