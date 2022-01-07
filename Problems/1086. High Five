@@ -1,0 +1,43 @@
+class Solution {
+    public int[][] highFive(int[][] items) {
+        
+        int[][] cnts = new int[1001][101];
+        Set<Integer> set = new HashSet<>();
+        
+        for(int i=0; i<items.length; ++i) {
+            int id = items[i][0];
+            int score = items[i][1];
+            
+            cnts[id][score] += 1;
+            set.add(id);
+        }
+        
+        int[][] result = new int[set.size()][2];
+        
+        int idx = 0;
+        for(int id=1; id<=1000; ++id) {
+            int sum=0;
+            int cnt=0;
+            for(int score=100; score>=0; --score) {
+                if(cnts[id][score] > 0) {
+                    while(cnts[id][score] > 0 && cnt<5) {
+                        cnts[id][score]-=1;
+                        cnt+=1;
+                        sum+=score;
+                    }
+                }
+                if(cnt == 5) {
+                    break;
+                }
+            }
+            
+            if(cnt==5) {
+                result[idx][0] = id;
+                result[idx][1] = sum/5;
+                idx+=1;
+            }
+        }
+        
+        return result;
+    }
+}
