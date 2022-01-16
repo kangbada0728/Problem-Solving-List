@@ -21,11 +21,9 @@ class Solution {
     private boolean dfs(TreeNode n1, TreeNode n2) {
         if(n1==null && n2==null) {
             return true;
-        }
-        if(n1==null) {
+        } else if(n1==null){
             return false;
-        }
-        if(n2==null) {
+        } else if(n2==null) {
             return false;
         }
         
