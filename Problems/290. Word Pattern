@@ -1,0 +1,59 @@
+import java.util.*;
+
+class Solution {
+    public boolean wordPattern(String pattern, String s) {
+        int[] num1 = pattern2Numbers(pattern);
+        int[] num2 = s2Numbers(s);
+        
+        if(num1.length != num2.length) {
+            return false;
+        }
+        
+        for(int i=0; i<num1.length; ++i) {
+            if(num1[i]!=num2[i]) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    private int[] pattern2Numbers(String s) {
+        int[] alpha = new int[26];
+        int num=1;
+        
+        int[] nums = new int[s.length()];
+        for(int i=0; i<s.length(); ++i) {
+            int n = s.charAt(i) - 'a';
+            if(alpha[n]==0) {
+                alpha[n]=num;
+                num+=1;
+            }
+            nums[i] = alpha[n];
+        }
+        
+        return nums;
+    }
+    
+    private int[] s2Numbers(String s) {
+        int[] alpha = new int[26];
+        int num=1;
+        
+        Map<String, Integer> map = new HashMap<>();
+        
+        StringTokenizer st = new StringTokenizer(s);
+        int[] nums = new int[st.countTokens()];
+        int i=0;
+        while(st.hasMoreTokens()) {
+            String n = st.nextToken();
+            if(!map.containsKey(n)) {
+                map.put(n, num);
+                num+=1;
+            }
+            nums[i++] = map.get(n);
+        }
+        
+        return nums;
+    }
+    
+}
