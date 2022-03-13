@@ -1,0 +1,30 @@
+class Solution {
+    public boolean rotateString(String s, String goal) {
+        
+        if(s.length() != goal.length()) {
+            return false;
+        }
+        
+        boolean flag = false;
+        for(int i=0; i<s.length(); ++i) {
+            int j = i;
+            int k=0;
+            for(k=0; k<goal.length(); ++k) {
+                if(s.charAt(j) != goal.charAt(k)) {
+                    break;
+                }
+                j+=1;
+                if(j==s.length()) {
+                    j=0;
+                }
+                
+            }
+            if(k==goal.length()) {
+                flag=true;
+                break;
+            }
+        }
+        
+        return flag;
+    }
+}
