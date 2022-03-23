@@ -1,0 +1,49 @@
+import java.util.*;
+
+class Solution {
+    public int[] solution(int m, int n, int[][] picture) {
+        
+        boolean[][] visit = new boolean[m][n];
+        int[] dx = {0, 0, 1, -1};
+        int[] dy = {1, -1, 0, 0};
+        
+        int cnt=0;
+        int maxSize=0;
+        for(int i=0; i<m; ++i) {
+            for(int j=0; j<n; ++j) {
+                if(picture[i][j]>0 && !visit[i][j]) {
+                    cnt+=1;
+                    Queue<int[]> q = new LinkedList<>();
+                    q.add(new int[]{i, j});
+                    visit[i][j] = true;
+                    
+                    int basicColor = picture[i][j];
+                    
+                    int ccc=0;
+                    while(!q.isEmpty()) {
+                        int x = q.peek()[0];
+                        int y = q.peek()[1];
+                        q.poll();
+                        
+                        ccc+=1;
+                        
+                        for(int d=0; d<4; ++d) {
+                            int nx = x + dx[d];
+                            int ny = y + dy[d];
+                            
+                            if(0<=nx && nx<m && 0<=ny && ny<n) {
+                                if(picture[nx][ny]==basicColor && !visit[nx][ny]) {
+                                    q.add(new int[]{nx, ny});
+                                    visit[nx][ny]=true;
+                                }
+                            }
+                        }
+                    }
+                    maxSize = Math.max(maxSize, ccc);
+                }
+            }
+        }
+        
+        return new int[]{cnt, maxSize};
+    }
+}
