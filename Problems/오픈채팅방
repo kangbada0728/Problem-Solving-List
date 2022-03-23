@@ -1,0 +1,53 @@
+import java.util.*;
+
+class Solution {
+    public String[] solution(String[] record) {
+        
+        Map<String, String> map = getNickname(record);
+        
+        String[] answer = getCommand(map, record);
+        
+        return answer;
+    }
+    
+    private String[] getCommand(Map<String, String> map, String[] record) {
+        
+        List<String> ans = new ArrayList<>();
+        
+        StringTokenizer st;
+        for(String s : record) {
+            st = new StringTokenizer(s);
+            String cmd = st.nextToken();
+            
+            if(cmd.equals("Enter")) {
+                String id = st.nextToken();
+                ans.add(map.get(id) +"님이 들어왔습니다.");
+            } else if(cmd.equals("Leave")) {
+                String id = st.nextToken();
+                ans.add(map.get(id) +"님이 나갔습니다.");
+            }
+        }
+        
+        return ans.toArray(new String[ans.size()]);
+    }
+    
+    private Map<String, String> getNickname(String[] record) {
+        
+        Map<String, String> map = new HashMap<>();
+        
+        StringTokenizer st;
+        for(String s : record) {
+            st = new StringTokenizer(s);
+            String cmd = st.nextToken();
+            
+            if(cmd.equals("Enter") || cmd.equals("Change")) {
+                String id = st.nextToken();
+                String nickName = st.nextToken();
+                map.put(id, nickName);
+            }
+        }
+        
+        return map;
+    }
+    
+}
