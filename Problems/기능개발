@@ -1,0 +1,37 @@
+import java.util.*;
+
+class Solution {
+    public int[] solution(int[] progresses, int[] speeds) {
+        int N = progresses.length;
+        int[] rest = new int[N];
+        for(int i=0; i<N; ++i) {
+            rest[i] = 100 - progresses[i];
+        }
+        
+        int[] spendDays = new int[N];
+        for(int i=0; i<N; ++i) {
+            spendDays[i] = rest[i]%speeds[i]==0 ? rest[i]/speeds[i] : rest[i]/speeds[i] + 1;
+        }
+        
+        int max=spendDays[0];
+        int cnt=1;
+        List<Integer> answer = new ArrayList<>();
+        for(int i=1; i<N; ++i) {
+            if(max>=spendDays[i]) {
+                cnt+=1;
+            } else {
+                answer.add(cnt);
+                cnt=1;
+                max=spendDays[i];
+            }
+        }
+        answer.add(cnt);
+        
+        int[] ans = new int[answer.size()];
+        for(int i=0; i<answer.size(); ++i) {
+            ans[i] = answer.get(i);
+        }
+        
+        return ans;
+    }
+}
