@@ -1,0 +1,62 @@
+import java.util.*;
+
+class Solution {
+    
+    public long solution(int w, int h) {
+        long answer = 1;
+        
+        int max = Math.max(w, h);
+        List<Integer> minors = getMinor(max);
+        List<Integer> m1 = getList(minors, w);
+        List<Integer> m2 = getList(minors, h);
+        
+        long sum=1;
+        for(int i=0; i<m1.size(); ++i) {
+            long n = minors.get(i);
+            int min = Math.min(m1.get(i), m2.get(i));
+            for(int j=0; j<min; ++j) {
+                sum*=n;
+            }
+        }
+        long ww = w;
+        long hh = h;
+        
+        return ww*hh-(ww+hh-sum);
+    }
+    
+    private List<Integer> getList(List<Integer> minors, int num) {
+        
+        List<Integer> cnt = new ArrayList<>();
+        for(Integer n : minors) {
+            int ccc = 0;
+            while(num%n==0) {
+                ccc+=1;
+                num/=n;
+            }
+            cnt.add(ccc);
+        }
+        
+        return cnt;
+    }
+    
+    private List<Integer> getMinor(int max) {
+        
+        boolean[] arr = new boolean[max+1];
+        for(int i=2; i<=max/2; ++i) {
+            if(!arr[i]) {
+                int n = i;
+                for(int j=2; j*n<=max; ++j) {
+                    arr[j*n]=true;
+                }
+            }
+        }
+        List<Integer> minor = new ArrayList<>();
+        for(int i=2; i<=max; ++i) {
+            if(!arr[i]) {
+                minor.add(i);
+            }
+        }
+        return minor;
+    }
+    
+}
