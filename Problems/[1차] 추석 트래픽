@@ -1,0 +1,47 @@
+import java.util.*;
+
+class Solution {
+    public int solution(String[] lines) {
+        int answer = 0;
+        
+        List<Time> arr = new ArrayList<>();
+        for(String line : lines) {
+            arr.add(new Time(line));
+        }
+        
+        for(int i=0; i<arr.size(); ++i) {
+            int curR = arr.get(i).R;
+            
+            int cnt=0;
+            for(int j=i; j<arr.size(); ++j) {
+                if(curR > arr.get(j).L - 1000) {
+                    cnt+=1;
+                }
+            }
+            
+            answer = Math.max(answer, cnt);
+        }
+        
+        return answer;
+    }
+    
+    
+    class Time {
+        
+        int L;
+        int R;
+        
+        public Time(String line) {
+            int Rh = Integer.parseInt(line.substring(11, 13)) * 60 * 60 * 1000;
+            int Rm = Integer.parseInt(line.substring(14, 16)) * 60 * 1000;
+            int Rs = (int)Math.floor(Double.parseDouble(line.substring(17, 23))*1000.0);
+            R = Rh + Rm + Rs;
+            
+            int gap = (int)Math.floor(Double.parseDouble(line.substring(24, line.length()-1))*1000.0);
+            
+            L = R - gap + 1;
+        }
+        
+    }
+    
+}
