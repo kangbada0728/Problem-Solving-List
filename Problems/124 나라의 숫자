@@ -1,25 +1,30 @@
-import java.util.ArrayList;
-import java.util.Stack;
+import java.util.*;
+
 class Solution {
-	    public String solution(int N) {
-	        
-	    	StringBuilder answer = new StringBuilder();
-	    	
-	    	Stack<Integer> stk=new Stack<Integer>();
-	    	while(N>0) {
-	    		int rest=N%3;
-	    		N/=3;
-	    		if(rest==0) {
-	    			N-=1;
-	    			rest=4;
-	    		}
-	    		stk.add(rest);
-	    	}
-	        ArrayList<Integer> al = new ArrayList<Integer>();
-	        while(!stk.isEmpty()) {
-	        	answer.append(stk.pop());
-	        }
-	        
-	        return answer.toString();
-	    }
-	}
+    public String solution(int n) {
+        
+        List<Integer> arr = getArr(n);
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i<arr.size(); ++i) {
+            sb.append(arr.get(i));
+        }
+        
+        return sb.toString();
+    }
+    
+    List<Integer> getArr(int n) {
+        
+        List<Integer> arr = new ArrayList<>();
+        while(n>0) {
+            int m = n%3;
+            n/=3;
+            if(m==0){
+                n-=1;
+                m=4;
+            }
+            arr.add(m);
+        }
+        Collections.reverse(arr);
+        return arr;
+    }
+}
