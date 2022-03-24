@@ -1,0 +1,71 @@
+import java.util.*;
+
+class Solution {
+    
+    private char[] characters = {'A', 'C', 'F', 'J', 'M', 'N', 'R', 'T'};
+    private int answer=0;
+    private String[] datas;
+    
+    public int solution(int n, String[] data) {
+        
+        datas = data;
+        
+        char[] arr = new char[8];
+        boolean[] used = new boolean[8];
+        dfs(arr, 0, used);
+        
+        return answer;
+    }
+    
+    private void dfs(char[] arr, int idx, boolean[] used) {
+        if(idx==8) {
+            if(checking(arr)) {
+                answer+=1;
+            }
+            return;
+        }
+        
+        for(int i=0; i<8; ++i) {
+            if(!used[i]) {
+                used[i]=true;
+                arr[idx]=characters[i];
+                dfs(arr, idx+1, used);
+                used[i]=false;
+            }
+        }
+    }
+    
+    private boolean checking(char[] arr) {
+        
+        Map<Character, Integer> map = new HashMap<>();
+        for(int i=0; i<8; ++i) {
+            map.put(arr[i], i);
+        }
+        
+        for(int i=0; i<datas.length; ++i) {
+            char a = datas[i].charAt(0);
+            char b = datas[i].charAt(2);
+            int n = Integer.parseInt(datas[i].charAt(4)+"");
+            
+            int p = map.get(a);
+            int q = map.get(b);
+            int diff = Math.abs(p-q)-1;
+            
+            if(datas[i].charAt(3)=='=') {
+                if(diff!=n) {
+                    return false;
+                }
+            } else if(datas[i].charAt(3)=='>') {
+                if(diff<=n) {
+                    return false;
+                }
+            } else if(datas[i].charAt(3)=='<') {
+                if(diff>=n) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+}
