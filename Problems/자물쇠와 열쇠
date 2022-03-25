@@ -1,0 +1,64 @@
+class Solution {
+    public boolean solution(int[][] key, int[][] lock) {
+        
+        int N = key.length;
+        int M = lock.length;
+        
+        int[][] matrix = new int[N + M + N][N + M + N];
+        for(int i=0; i<M; ++i) {
+            for(int j=0; j<M; ++j) {
+                matrix[i+N][j+N] = lock[i][j];
+            }
+        }
+        
+        for(int i=0; i<M+N; ++i) {
+            for(int j=0; j<M+N; ++j) {
+                for(int r=0; r<4; ++r) {
+                    
+                    for(int p=i; p<i+N; ++p) {
+                        for(int q=j; q<j+N; ++q) {
+                            matrix[p][q] += key[p-i][q-j];
+                        }
+                    }
+                    
+                    int cnt=0;
+                    for(int a=N; a<M+N; ++a) {
+                        for(int b=N; b<M+N; ++b) {
+                            if(matrix[a][b]>1 || matrix[a][b]==0) {
+                                break;
+                            }else{
+                                cnt+=1;
+                            }
+                        }
+                    }
+                    if(cnt==M*M) {
+                        return true;
+                    }
+                    
+                    
+                    for(int p=i; p<i+N; ++p) {
+                        for(int q=j; q<j+N; ++q) {
+                            matrix[p][q] -= key[p-i][q-j];
+                        }
+                    }
+                    key = rotate(key);
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    private int[][] rotate(int[][] key) {
+        int N = key.length;
+        int[][] temp = new int[N][N];
+        
+        for(int j=0; j<N; ++j) {
+            for(int i=0; i<N; ++i) {
+                temp[j][N-i-1] = key[i][j];
+            }
+        }
+        return temp;
+    }
+    
+}
