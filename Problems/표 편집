@@ -1,0 +1,113 @@
+import java.util.*;
+
+class Solution {
+    
+    Stack<Node> stk = new Stack<>();
+    
+    public String solution(int n, int k, String[] cmd) {
+        String answer = "";
+        
+        Node node = new Node(null, null, 0);
+        Node init = node;
+        
+        for(int i=1; i<n; ++i) {
+            node = node.add();
+        }
+        
+        Node cur = init;
+        cur = cur.down(k);
+        
+        for(String ccc : cmd) {
+            char c = ccc.charAt(0);
+            if(c=='U') {
+                int cnt = Integer.parseInt(ccc.substring(2, ccc.length()));
+                cur = cur.up(cnt);
+            } else if(c=='D') {
+                int cnt = Integer.parseInt(ccc.substring(2));
+                cur = cur.down(cnt);
+            } else if(c=='C') {
+                cur = cur.delete();
+            } else { // Z
+                Node nnn = stk.pop();
+                nnn.restore();
+            }
+        }
+        
+        cur = init;
+        
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i<n; ++i) {
+            sb.append('O');
+        }
+        while(!stk.isEmpty()) {
+            Node nn = stk.pop();
+            sb.setCharAt(nn.num, 'X');
+        }
+        
+        return sb.toString();
+    }
+    
+    class Node {
+        Node prev;
+        Node next;
+        int num;
+        
+        public Node() {}
+        
+        public Node(Node prev, Node next, int num) {
+            this.prev = prev;
+            this.next = next;
+            this.num = num;
+        }
+        
+        public Node add() {
+            Node nnn = new Node();
+            this.next = nnn;
+            nnn.prev = this;
+            nnn.num = this.num+1;
+            nnn.next = null;
+            return nnn;
+        }
+        
+        public Node up(int cnt) {
+            Node tmp = this;
+            for(int i=0; i<cnt; ++i) {
+                tmp=tmp.prev;
+            }
+            return tmp;
+        }
+        
+        public Node down(int cnt) {
+            Node tmp = this;
+            for(int i=0; i<cnt; ++i) {
+                tmp = tmp.next;
+            }
+            return tmp;
+        }
+        
+        public void restore() {
+            if(prev != null) {
+                prev.next = this;
+            }
+            if(next != null) {
+                next.prev = this;
+            }
+        }
+        
+        public Node delete() {
+            stk.add(this);
+            if(prev==null) {
+                next.prev = null;
+                return next;
+            }
+            if(next==null) {
+                prev.next = null;
+                return prev;
+            }
+            next.prev = prev;
+            prev.next = next;
+            return next;
+        }
+    }
+    
+}
