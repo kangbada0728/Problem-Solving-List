@@ -4,44 +4,48 @@ class Solution {
     public int solution(String[] lines) {
         int answer = 0;
         
-        List<Time> arr = new ArrayList<>();
-        for(String line : lines) {
-            arr.add(new Time(line));
-        }
+        List<Integer> start = new ArrayList<>();
+        List<Integer> end = new ArrayList<>();
+        parsing(start, end, lines);
         
-        for(int i=0; i<arr.size(); ++i) {
-            int curR = arr.get(i).R;
-            
+        return counting(start, end);
+    }
+    
+    private int counting(List<Integer> start, List<Integer> end) {
+        
+        int max=0;
+        
+        int N = start.size();
+        for(int i=0; i<N; ++i) {
             int cnt=0;
-            for(int j=i; j<arr.size(); ++j) {
-                if(curR > arr.get(j).L - 1000) {
+            int curR = end.get(i);
+            for(int j=i; j<N; ++j) {
+                int nextL = start.get(j);
+                if(nextL < curR + 1000) {
                     cnt+=1;
                 }
             }
-            
-            answer = Math.max(answer, cnt);
+            max = Math.max(max, cnt);
         }
         
-        return answer;
+        return max;
     }
     
-    
-    class Time {
+    private void parsing(List<Integer> start, List<Integer> end, String[] lines) {
         
-        int L;
-        int R;
-        
-        public Time(String line) {
-            int Rh = Integer.parseInt(line.substring(11, 13)) * 60 * 60 * 1000;
-            int Rm = Integer.parseInt(line.substring(14, 16)) * 60 * 1000;
-            int Rs = (int)Math.floor(Double.parseDouble(line.substring(17, 23))*1000.0);
-            R = Rh + Rm + Rs;
+        for(String line : lines) {
+            int h = Integer.parseInt(line.substring(11, 13)) * 60 * 60;
+            int m = Integer.parseInt(line.substring(14, 16)) * 60;
+            int s = Integer.parseInt(line.substring(17, 19));
+            int ms = Integer.parseInt(line.substring(20, 23));
             
-            int gap = (int)Math.floor(Double.parseDouble(line.substring(24, line.length()-1))*1000.0);
+            int right = (h + m + s) * 1000 + ms;
+            int gap = (int)Math.floor(Double.parseDouble(line.substring(24, line.length()-1)) * 1000);
+            int left = right - gap + 1;
             
-            L = R - gap + 1;
+            start.add(left);
+            end.add(right);
         }
-        
     }
     
 }
