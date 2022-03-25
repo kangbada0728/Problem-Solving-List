@@ -1,0 +1,47 @@
+import java.util.*;
+
+class Solution {
+    public String solution(int n, int t, int m, String[] timetable) {
+        String answer = "";
+        
+        int[] busArriveTime = new int[n];
+        busArriveTime[0] = 540;
+        for(int i=1; i<n; ++i) {
+            busArriveTime[i] = busArriveTime[i-1] + t;
+        }
+        int[] persons = new int[n];
+        int[] latestTime = new int[n];
+        
+        int[] personArriveTime = new int[timetable.length];
+        int p=0;
+        for(String time : timetable) {
+            int minute = Integer.parseInt(time.substring(0, 2)) * 60 + Integer.parseInt(time.substring(3, 5));
+            personArriveTime[p++] = minute;
+        }
+        Arrays.sort(personArriveTime);
+        
+        for(int minute : personArriveTime) {
+            
+            for(int i=0; i<n; ++i) {
+                if(minute <= busArriveTime[i]) {
+                    if(persons[i] < m) {
+                        persons[i] += 1;
+                        latestTime[i] = Math.max(latestTime[i], minute);
+                        break;
+                    }
+                }
+            }
+        }
+        
+        if(persons[n-1] < m) {
+            int h = busArriveTime[n-1]/60;
+            int mm = busArriveTime[n-1]%60;
+            return String.format("%02d:%02d", h, mm);
+        } else {
+            int lastTime = latestTime[n-1] - 1;
+            int h = lastTime/60;
+            int mm = lastTime%60;
+            return String.format("%02d:%02d", h, mm);
+        }
+    }
+}
