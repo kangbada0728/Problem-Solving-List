@@ -1,0 +1,78 @@
+import java.util.*;
+
+class Solution {
+    public int[] solution(String[] gems) {
+        int[] answer = {};
+        
+        Set<String> tmp = new HashSet<>();
+        for(String gem : gems) {
+            tmp.add(gem);
+        }
+        int N = tmp.size();
+        
+        int left = 0;
+        int right = 1;
+        
+        Map<String, Integer> set = new HashMap<>();
+        set.put(gems[0], 1);
+        if(set.size()==tmp.size()) {
+            return new int[]{1, 1};
+        }
+        
+        int minLength = 0x7fffffff;
+        int minStartNum = 0x7fffffff;
+        int ansEndNum = 0;
+        
+        while(right<=gems.length) {
+            if(set.size() < N) {
+                if(right==gems.length) {
+                    break;
+                }
+                String gem = gems[right];
+                if(set.containsKey(gem)) {
+                    int val = set.get(gem);
+                    set.replace(gem, val+1);
+                } else {
+                    set.put(gem, 1);
+                }
+                right+=1;
+                
+                if(set.size() == N) {
+                    if(minLength > right-left) {
+                        minLength = right-left;
+                        minStartNum = left;
+                        ansEndNum = right-1;
+                    } else if(minLength == right-left) {
+                        if(minStartNum > left) {
+                            minStartNum = left;
+                            ansEndNum = right - 1;
+                        }
+                    }
+                }
+            } else {
+                String gem = gems[left];
+                int val = set.get(gem);
+                set.replace(gem, val-1);
+                if(set.get(gem)==0) {
+                    set.remove(gem);
+                }
+                left+=1;
+                
+                if(set.size() == N) {
+                    if(minLength > right-left) {
+                        minLength = right-left;
+                        minStartNum = left;
+                        ansEndNum = right-1;
+                    } else if(minLength == right-left) {
+                        if(minStartNum > left) {
+                            minStartNum = left;
+                            ansEndNum = right - 1;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return new int[]{minStartNum+1, ansEndNum+1};
+    }
+}
