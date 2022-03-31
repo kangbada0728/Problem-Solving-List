@@ -1,0 +1,62 @@
+import java.util.*;
+
+class Solution {
+    
+    private String[] userId;
+    private String[] bannedId;
+    private int N;
+    private int M;
+    private boolean[] visit;
+    private List<String> list = new ArrayList<>();
+    private Set<String> lll = new HashSet<>();
+    
+    private int answer=0;
+    
+    public int solution(String[] user_id, String[] banned_id) {
+        
+        userId = user_id;
+        bannedId = banned_id;
+        N = user_id.length;
+        M = banned_id.length;
+        visit = new boolean[N];
+        
+        dfs(0, 0);
+        
+        return lll.size();
+    }
+    
+    private void dfs(int idx, int cnt) {
+        if(cnt==M) {
+            List<String> li = new ArrayList<>(list);
+            Collections.sort(li);
+            StringBuilder sb = new StringBuilder();
+            for(String s : li) {
+                sb.append(s);
+            }
+            lll.add(sb.toString());
+            return;
+        }
+        
+        for(int i=0; i<N; ++i) {
+            if(!visit[i] && userId[i].length() == bannedId[idx].length()) {
+                
+                boolean flag = true;
+                for(int j=0; j<userId[i].length(); ++j) {
+                    if(bannedId[idx].charAt(j) != '*' && bannedId[idx].charAt(j) != userId[i].charAt(j)) {
+                        flag = false;
+                        break;
+                    }
+                }
+                
+                if(flag) {
+                    visit[i] = true;
+                    list.add(userId[i]);
+                    dfs(idx+1, cnt+1);
+                    list.remove(list.size()-1);
+                    visit[i] = false;
+                }
+            }
+        }
+    }
+    
+}
